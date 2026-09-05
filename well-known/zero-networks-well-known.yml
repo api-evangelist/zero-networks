@@ -1,0 +1,106 @@
+generated: '2026-09-05'
+method: probed
+source: live probes of the named /.well-known/ path list on every host this record knows
+note: >-
+  Every named path was probed on all four hosts on 2026-09-05 and NOTHING was served.
+  zeronetworks.com and www.zeronetworks.com return a WordPress soft-404 HTML page with an
+  HTTP 404 status; portal.zeronetworks.com returns an nginx 404; support.zeronetworks.com
+  is behind a Cloudflare interstitial that answers 403 "Just a moment..." to every path
+  including the well-known ones, so that host is UNVERIFIED rather than confirmed-absent.
+  No WellKnown, SecurityTxt or APICatalog pointer is emitted — this file records an
+  absence, not a presence. The OpenAPI declares no oauth2 flow, so the absence of
+  /.well-known/oauth-authorization-server is consistent with the contract.
+hosts:
+- host: zeronetworks.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: www.zeronetworks.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: portal.zeronetworks.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: support.zeronetworks.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: Cloudflare bot interstitial — not a served document and not a confirmed absence
+  - path: /.well-known/openid-configuration
+    status: 403
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+    file: null
+  - path: /.well-known/api-catalog
+    status: 403
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 403
+    file: null
+  - path: /.well-known/agent.json
+    status: 403
+    file: null

@@ -1,0 +1,55 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Zero Networks Platform API
+  version: 1.0.0
+x-generated: '2026-09-05'
+x-method: generated
+x-source: openapi/zero-networks-platform-openapi.yaml
+x-note: >-
+  Captures the API Evangelist enrichment layer over the provider's own OpenAPI 3.0.1
+  (info.version 1.26.3, harvested verbatim from
+  https://raw.githubusercontent.com/zeronetworks/zeronetworks-python-sdk/master/.speakeasy/out.openapi.yaml).
+  The original spec is never mutated. The single most consequential action here is the
+  servers[] correction: the published contract declares
+  https://portal.zeronetworks.com/v1/api, which returns HTTP 404 (nginx) on every path we
+  probed, while https://portal.zeronetworks.com/api/v1 returns the API's own JSON 401
+  envelope. This overlay records the live base as an ADDITIONAL server and leaves the
+  vendor-declared one in place rather than removing it.
+extends: ./openapi/zero-networks-platform-openapi.yaml
+actions:
+  - target: $.info
+    update:
+      x-api-evangelist-profile: https://apis.io/provider/zero-networks
+      x-documented-operation-coverage: >-
+        40 of 1,596 declared paths (2.5%) carry any operation object; the remaining 1,556
+        path items are published empty. The contract advertises the full platform surface
+        (assets 588, k8s 211, groups 210, protection 183, users 164, settings 136) but
+        documents only the segmentation-rule and custom-group subset the Speakeasy SDK
+        targets were generated for.
+  - target: $.servers
+    update:
+      - url: https://portal.zeronetworks.com/api/v1
+        description: >-
+          Live customer base URL, probed 2026-09-05. Returns the API's JSON error envelope
+          ({"error":"unauthorized","message":"jwt authorization not found"}) with HTTP 401
+          on /audit and /assets. The vendor-declared server below (/v1/api) returns nginx
+          404 on the same paths.
+        x-api-evangelist-verified: probed
+  - target: $.components.securitySchemes.api_key
+    update:
+      description: >-
+        API token minted in the Zero Networks console under Settings > API ("Generate API
+        Token"), sent verbatim in the Authorization request header. It is not an OAuth
+        bearer token and carries no "Bearer " prefix in the scheme definition. Token
+        privilege is governed by the account role model in components.schemas.userRole,
+        where role 4 is API-FullAccess and role 5 is API-ReadOnly.
+  - target: $.components.schemas.error
+    update:
+      description: >-
+        The uniform error envelope for every 4xx/5xx response across the API. Confirmed
+        live against https://portal.zeronetworks.com/api/v1/audit on 2026-09-05. Not
+        RFC 9457 application/problem+json — a bare {error, message} object served as
+        application/json.
+      x-api-evangelist-observed-example:
+        error: unauthorized
+        message: jwt authorization not found

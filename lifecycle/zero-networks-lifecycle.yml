@@ -1,0 +1,78 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  https://status.zeronetworks.com/api/v2/summary.json (probed 2026-09-05) +
+  openapi/zero-networks-platform-openapi.yaml + https://registry.terraform.io/v1/providers/zeronetworks/zeronetworks
+versioning:
+  style: uri-path
+  current: v1
+  base: https://portal.zeronetworks.com/api/v1
+  contract_version: 1.26.3
+  policy_published: false
+  note: >-
+    The URI major version has been v1 for the life of the public API. The OpenAPI
+    info.version (1.26.3) tracks the product release train rather than the API contract —
+    the Terraform provider ships as 1.26.31 against the same source. Zero Networks
+    publishes no version-support window, no version-negotiation header, and no statement of
+    what changing 1.26.x to 1.27.x means for a caller.
+deprecation:
+  policy_published: false
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  note: >-
+    No deprecation policy exists on any public surface, and no operation, parameter or
+    schema in the published contract carries `deprecated: true`. Neither the RFC 8594
+    Sunset header nor the Deprecation header is declared on any response. A caller has no
+    programmatic or documented warning of removal. No `Deprecation` pointer is emitted —
+    there is nothing to point at.
+status_page:
+  url: https://status.zeronetworks.com/
+  platform: Atlassian Statuspage
+  machine_readable: true
+  endpoints:
+  - https://status.zeronetworks.com/api/v2/status.json
+  - https://status.zeronetworks.com/api/v2/summary.json
+  - https://status.zeronetworks.com/history.rss
+  probed: '2026-09-05'
+  http_status: 200
+  indicator_at_probe: none
+  components:
+  - name: Portal Access
+    description: Accessibility to portal.zeronetworks.com
+    status: operational
+  - name: Assets Monitoring
+    description: Monitoring of assets to the cloud.
+    status: operational
+  - name: MFA
+    status: operational
+  - name: Zero Connect (ZTNA)
+    description: Zero Connect (ZTNA)
+    status: operational
+  - name: Email Notifications
+    description: Email notifications for changes in the Admin Portal
+    status: operational
+  note: >-
+    A real, subscribable Statuspage with per-component granularity and a public JSON + RSS
+    feed — the strongest operational signal Zero Networks publishes. Note that the
+    components track the PRODUCT (portal, MFA, ZTNA, notifications); there is no component
+    for the REST API itself, so an API consumer cannot distinguish an API outage from a
+    portal outage on this page.
+sla:
+  published: false
+  note: >-
+    No public SLA. The Service Agreement PDF at
+    https://zeronetworks.com/files/legal/Zero-Networks-Service-Agreement.pdf is the
+    contracting document; no uptime commitment is published on the web surface.
+changelog:
+  published: false
+  url: null
+  note: >-
+    No dated public changelog or release-notes page was found. Release notes appear to live
+    inside the Cloudflare-gated help center at support.zeronetworks.com, which answers 403
+    to every crawler request. The only dated public release signal is registry metadata —
+    Terraform provider 1.26.31 (2026-04-30), PyPI zeronetworks 1.0.1 (2026-04-20),
+    PowerShell Gallery ZeroNetworks 0.26.6-preview (2026-07-15). No ChangeLog pointer is
+    emitted.

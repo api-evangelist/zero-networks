@@ -1,0 +1,91 @@
+generated: '2026-09-05'
+method: derived
+source: openapi/zero-networks-platform-openapi.yaml (declared path index)
+asyncapi_published: false
+note: >-
+  Zero Networks ships NO AsyncAPI specification — searched the vendor site, llms.txt, the
+  19-repo zeronetworks GitHub organization and /asyncapi.yaml on every host on 2026-09-05,
+  all misses. It does, however, operate a real webhook subsystem AND a SIEM event-export
+  subsystem, and both are visible as declared path families in the company's own published
+  OpenAPI. Those path items are published EMPTY (no operation object, no request/response
+  schema), so what follows is the surface's existence and shape as the vendor's own contract
+  declares it — not an event catalogue. The individual event types are NOT published: the
+  path /settings/events-receiver/configuration/export/{receiverType}/data-structure/{siemEventType}
+  proves a per-event-type data-structure endpoint exists and is queryable by an
+  authenticated caller, which is exactly the machine-readable event catalogue this artifact
+  would otherwise carry — and it is reachable only with a token. NEVER fabricated: no event
+  names, payloads or headers are asserted here.
+webhooks:
+  supported: true
+  management_surface: /settings/webhooks
+  paths:
+  - path: /settings/webhooks
+    role: collection — list and create webhook subscriptions
+    operations_published: false
+  - path: /settings/webhooks/{webhookId}
+    role: single subscription — read, update, delete
+    operations_published: false
+  - path: /settings/webhooks/{webhookId}/triggers
+    role: >-
+      the trigger set for one subscription — the endpoint that would enumerate which
+      platform events fire this webhook. This is where the event catalogue lives and it is
+      auth-gated.
+    operations_published: false
+  - path: /settings/webhooks/test
+    role: send a test delivery for an unsaved configuration
+    operations_published: false
+  - path: /settings/webhooks/{webhookId}/test
+    role: send a test delivery for a saved subscription
+    operations_published: false
+  - path: /settings/webhooks/sender-ip
+    role: >-
+      the source IP addresses Zero Networks delivers webhooks from — the allowlist a
+      receiving firewall needs. A genuinely useful operational endpoint to publish.
+    operations_published: false
+  event_catalog_published: false
+  signature_verification: unknown
+  retry_policy: unknown
+  delivery_guarantees: unknown
+siem_event_export:
+  supported: true
+  management_surface: /settings/events-receiver/configuration
+  paths:
+  - path: /settings/events-receiver/configuration
+    role: the events-receiver configuration root
+    operations_published: false
+  - path: /settings/events-receiver/configuration/{receiverType}
+    role: per-receiver-type configuration — receiverType is a discriminator over the supported SIEM targets
+    operations_published: false
+  - path: /settings/events-receiver/configuration/export/{receiverType}/data-structure/{siemEventType}
+    role: >-
+      the per-event-type payload schema for a given receiver — the closest thing to a
+      published event schema registry this API has, and it requires authentication
+    operations_published: false
+  - path: /settings/events-receiver/configuration/exporter-ip
+    role: the source IP addresses events are exported from
+    operations_published: false
+  - path: /settings/events-receiver/configuration/sync-status
+    role: export health / last-sync state
+    operations_published: false
+  receiver_types_published: false
+  event_types_published: false
+  note: >-
+    Third-party observability vendors ingest Zero Networks audit and network activity today
+    (Elastic, Datadog and Google SecOps all ship Zero Networks integrations), but every one
+    of them POLLS the REST activity/audit endpoints with an API key rather than receiving
+    pushed events — which is consistent with the event catalogue being auth-gated rather
+    than published.
+notifications:
+  paths:
+  - path: /settings/notification
+    role: email notification configuration for Admin Portal changes
+    operations_published: false
+  note: >-
+    "Email Notifications" is one of the five components on the public Statuspage
+    (status.zeronetworks.com), which independently corroborates that this is a live
+    production subsystem and not a vestigial path.
+gaps:
+- No AsyncAPI document is published for either the webhook or the SIEM export surface.
+- The 12 declared event-surface paths carry no operation objects, so no schema, parameter or response is discoverable.
+- No webhook signing scheme, retry policy or delivery guarantee is published.
+- The event-type enumeration exists as an API endpoint but only for authenticated callers.

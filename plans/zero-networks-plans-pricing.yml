@@ -1,0 +1,32 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  https://zeronetworks.com/ (no pricing entry in navigation, footer, sitemap.xml or
+  llms.txt) + https://zeronetworks.com/pricing (HTTP 404, probed 2026-09-05)
+plan_count: 0
+currency: null
+plans: []
+note: >-
+  Zero Networks publishes NO pricing. There is no /pricing page (404), no pricing link in
+  the site navigation or footer, no pricing entry in the company's own llms.txt (which
+  enumerates Platform, Use Cases, Customer Stories and Resources and omits pricing
+  entirely), and no pricing URL anywhere in sitemap.xml. The published path to purchase is a
+  sales conversation: https://zeronetworks.com/request-demo and
+  https://zeronetworks.com/contact. This is an enterprise contact-us motion, not a missing
+  page — the company sells an enterprise microsegmentation platform through direct sales,
+  distributors (Exclusive Networks in APAC) and a Microsoft Azure Marketplace SaaS listing
+  whose plans-and-pricing tab is bot-gated (HTTP 403) and, on marketplace listings of this
+  shape, is normally a private-offer / contact-me transaction rather than a public rate
+  card. No metered or per-call API pricing exists because API access is a feature of the
+  platform subscription rather than a separately-priced product.
+evidence:
+- url: https://zeronetworks.com/pricing
+  status: 404
+- url: https://zeronetworks.com/plans
+  status: 404
+- url: https://zeronetworks.com/llms.txt
+  status: 200
+  finding: enumerates the full public information architecture; contains no pricing section
+- url: https://zeronetworks.com/request-demo
+  status: 200
+  finding: the published route to a quote

@@ -1,0 +1,78 @@
+generated: '2026-09-05'
+method: derived
+source: openapi/zero-networks-platform-openapi.yaml (4xx/5xx responses) + live probe of https://portal.zeronetworks.com/api/v1/audit
+format: custom
+rfc9457: false
+note: >-
+  Zero Networks does NOT use RFC 9457 problem+json. Every documented 4xx/5xx response on
+  every one of the 40 operations returns application/json carrying the same two-field
+  envelope defined once in components.schemas.error. There is no error `code`, `type` URI,
+  `instance`, `detail` or `trace_id` field, and the spec publishes no example for any error
+  response (0 of 218 error responses carry an example), so the value space of the `error`
+  string is not enumerated anywhere the provider publishes. The one concrete pair below was
+  observed live and unauthenticated; it is the only error body we can state as fact. No
+  public error-code reference exists on the vendor site or its Cloudflare-gated help center,
+  so titles/remediation could not be enriched by search.
+envelope:
+  media_type: application/json
+  schema: '#/components/schemas/error'
+  fields:
+  - name: error
+    type: string
+    description: Short machine-ish slug for the failure class. Not enumerated in the contract.
+  - name: message
+    type: string
+    description: Human-readable explanation. Not enumerated in the contract.
+status_codes:
+- status: 400
+  title: Bad Request
+  operations: 40
+  coverage: all documented operations
+- status: 401
+  title: Unauthorized
+  operations: 40
+  coverage: all documented operations
+  observed:
+    error: unauthorized
+    message: jwt authorization not found
+    evidence: https://portal.zeronetworks.com/api/v1/audit
+    probed: '2026-09-05'
+    note: >-
+      Returned when the Authorization header is absent. The wording ("jwt authorization not
+      found") indicates the console-issued API token is carried as a JWT even though the
+      securityScheme is declared as a plain apiKey header.
+- status: 403
+  title: Forbidden
+  operations: 40
+  coverage: all documented operations
+  note: >-
+    Expected where the token's account role is API-ReadOnly (userRole 5) and the request is
+    mutating, or the role lacks the resource. The role enum lives in
+    components.schemas.userRole; the mapping from role to permitted operation is not published.
+- status: 404
+  title: Not Found
+  operations: 26
+  coverage: >-
+    the 26 operations addressing a specific {groupId}/{ruleId}/{policyId}/{reactivePolicyId}.
+    The 14 operations WITHOUT a documented 404 are the six create operations
+    (CustomGroups_Create, AEExclusionsInbound_Create, AEExclusionsOutbound_Create,
+    RPCRules_Create, InboundRules_Create, OutboundRules_Create), the four MFA/custom-group
+    create+update pairs, and the custom-group member sub-resource operations — several of
+    which do address a path id and can plainly 404, so this is a contract gap rather than a
+    real guarantee.
+- status: 409
+  title: Conflict
+  operations: 6
+  coverage: >-
+    exactly the six CREATE operations, verified against the spec — CustomGroups_Create,
+    AEExclusionsInbound_Create, AEExclusionsOutbound_Create, RPCRules_Create,
+    InboundRules_Create, OutboundRules_Create. A 409 is the collision signal for a
+    duplicate rule or group; no update or delete operation declares one.
+- status: 500
+  title: Internal Server Error
+  operations: 40
+  coverage: all documented operations
+gaps:
+- No error code registry is published — a client cannot branch on anything but the HTTP status.
+- No `Retry-After` or rate-limit response header is declared anywhere in the contract.
+- No error response in the spec carries an example.

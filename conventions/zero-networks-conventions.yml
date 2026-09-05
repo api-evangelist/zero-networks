@@ -1,0 +1,170 @@
+generated: '2026-09-05'
+method: derived
+source: >-
+  openapi/zero-networks-platform-openapi.yaml + live probes of
+  https://portal.zeronetworks.com/api/v1/audit and /assets (2026-09-05). The vendor's help
+  center at support.zeronetworks.com is behind a Cloudflare interstitial (HTTP 403 to every
+  crawler request), so nothing here is enriched from prose documentation — every statement
+  below is read from the published contract or observed on the wire.
+authentication:
+  style: api-key-header
+  header: Authorization
+  scheme_name: api_key
+  prefix: none declared
+  applied: 'globally — root-level security: [{api_key: []}]'
+  issuance: >-
+    Generated in the Zero Networks console under Settings > API ("Generate API Token") with
+    a label. Token privilege follows the account role model — components.schemas.userRole
+    enumerates API-FullAccess (4) and API-ReadOnly (5) among 15 roles.
+  observation: >-
+    An unauthenticated GET returns {"error":"unauthorized","message":"jwt authorization not
+    found"} — the token is a JWT on the wire despite being modelled as an opaque apiKey.
+  oauth2: false
+  openid_connect: false
+  mtls: false
+idempotency:
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  retention: null
+  note: >-
+    No idempotency mechanism of any kind exists. The contract declares no Idempotency-Key
+    (or any client-supplied request key) header on any of the 29 mutating operations, no
+    request-id echo, and no conditional-request support (no ETag, If-Match or
+    If-Unmodified-Since header is declared on any operation or response). The only replay
+    signal a client gets is the 409 Conflict declared on the six CREATE operations, which
+    reports a duplicate object rather than de-duplicating a retried request. A retried
+    POST /protection/rules/inbound after a timeout will either create a second rule or 409,
+    and the caller cannot tell which outcome the original attempt produced. For an API
+    whose writes change enterprise firewall policy, this is the most consequential gap in
+    the contract.
+pagination:
+  style: undetermined
+  params: []
+  response_fields: []
+  note: >-
+    None of the 11 documented GET operations is a collection listing with paging
+    parameters — CustomGroupMembers_List returns a bare membersId array with no cursor,
+    offset or limit parameter. The paged surfaces (assets, activities, audit) are among the
+    1,556 path items published with no operation object, so their paging convention is not
+    discoverable from the contract. Third-party integrations call
+    /api/v1/audit?limit=1, which implies a `limit` query parameter exists on the activity
+    and audit collections, but that parameter is not declared anywhere Zero Networks
+    publishes and is therefore recorded as an observation about integrators, not a
+    documented convention.
+field_expansion:
+  supported: false
+  note: >-
+    No expand/fields/include parameter is declared. The API instead denormalizes eagerly —
+    id-list fields are shadowed by resolved `*Infos` object arrays (remoteEntityIdsList /
+    remoteEntityInfos, srcUsersList / srcUsersInfos, userIdsList / userInfos), so the
+    caller receives both the references and the resolved objects on every read.
+metadata:
+  supported: false
+  note: >-
+    No free-form metadata bag. The nearest first-class equivalent is `changeTicket`, present
+    on rule, rpcRule, reactivePolicy and internalAccessPolicy — a field for carrying the
+    ITSM change ticket that authorized the policy change. `description` and `name` are the
+    only other caller-controlled labels.
+request_id_tracing:
+  supported: false
+  note: No request-id or correlation-id request or response header is declared in the contract.
+versioning:
+  style: uri-path
+  current: v1
+  contract_version: 1.26.3
+  note: >-
+    The API is pinned at /api/v1 while the OpenAPI info.version tracks the product release
+    train (1.26.3, matching the 1.26.31 Terraform provider). There is no Accept-header or
+    query-parameter version negotiation, no declared version-support window, and no
+    published deprecation policy. NOTE: the contract's own servers[] entry declares
+    https://portal.zeronetworks.com/v1/api, which returns nginx 404 — the live base is
+    /api/v1, confirmed by probe.
+error_envelope:
+  format: custom
+  rfc9457: false
+  media_type: application/json
+  shape: "{ error: string, message: string }"
+  detail: errors/zero-networks-problem-types.yml
+rate_limit_signaling:
+  declared: false
+  headers: []
+  exhaustion_status: undocumented
+  note: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header appears anywhere in the contract,
+    and no 429 response is declared on any of the 40 operations. See
+    rate-limits/zero-networks-rate-limits.yml.
+reversibility:
+  grade: documented
+  note: >-
+    Every mutating surface is a CRUD triple, so the reversal path for a create is the
+    matching DELETE and for an update the matching PUT with the prior body — a client that
+    captured the object before writing can restore it. That makes the reversal OPERATION
+    discoverable from the contract. What is NOT stated anywhere is a WINDOW: no soft-delete
+    retention, no undo period, no restore endpoint, and no trash/recycle collection appears
+    in the documented surface. The `rule` schema carries deletedAt/deletedBy fields, which
+    strongly implies rules are soft-deleted server-side, but no documented operation reads
+    or restores a deleted rule and no retention period is published — so the field hints at
+    a restore capability the contract does not expose. Grade is `documented`, not
+    `verified`, because no window is stated. NEVER assume one.
+  surfaces:
+  - write: InboundRules_Create (POST /protection/rules/inbound)
+    reversal: InboundRule_Delete (DELETE /protection/rules/inbound/{ruleId})
+    window: not stated
+  - write: InboundRule_Update (PUT /protection/rules/inbound/{ruleId})
+    reversal: InboundRule_Update with the prior body
+    window: not stated
+    note: No version history or prior-state read operation is published, so the caller must have kept the old body.
+  - write: OutboundRules_Create (POST /protection/rules/outbound)
+    reversal: OutboundRule_Delete (DELETE /protection/rules/outbound/{ruleId})
+    window: not stated
+  - write: RPCRules_Create (POST /protection/rpc-rules)
+    reversal: RPCRule_Delete (DELETE /protection/rpc-rules/{ruleId})
+    window: not stated
+  - write: MFAInboundPolicies_Create (POST /protection/reactive-policies/inbound)
+    reversal: MFAInboundPolicies_Delete (DELETE /protection/reactive-policies/inbound/{reactivePolicyId})
+    window: not stated
+  - write: MFAOutboundPolicies_Create (POST /protection/reactive-policies/outbound)
+    reversal: MFAOutboundPolicies_Delete (DELETE /protection/reactive-policies/outbound/{reactivePolicyId})
+    window: not stated
+  - write: InternalAccessPolicy_Create (POST /protection/internal-access/policies)
+    reversal: InternalAccessPolicy_Delete (DELETE /protection/internal-access/policies/{policyId})
+    window: not stated
+  - write: AEExclusionsInbound_Create (POST /protection/ae-exclusions/inbound)
+    reversal: AEExclusionsInbound_Delete (DELETE /protection/ae-exclusions/inbound/{ruleId})
+    window: not stated
+  - write: AEExclusionsOutbound_Create (POST /protection/ae-exclusions/outbound)
+    reversal: AEExclusionsOutbound_Delete (DELETE /protection/ae-exclusions/outbound/{ruleId})
+    window: not stated
+  - write: CustomGroups_Create (POST /groups/custom)
+    reversal: CustomGroups_Delete (DELETE /groups/custom/{groupId})
+    window: not stated
+  - write: CustomGroupsMembers_Add (PUT /groups/custom/{groupId}/members)
+    reversal: CustomGroupsMembers_Delete (DELETE /groups/custom/{groupId}/members)
+    window: not stated
+  - write: CustomGroups_Update (PUT /groups/custom/{groupId})
+    reversal: CustomGroups_Update with the prior body
+    window: not stated
+  mitigations:
+  - >-
+    `expiresAt` on rule and rpcRule lets a caller create a self-expiring rule, which is a
+    forward-dated reversal rather than an undo but bounds the blast radius of a bad write.
+  - >-
+    `state` on rule, rpcRule, reactivePolicy and internalAccessPolicy allows disable-instead-
+    of-delete, which is reversible in a way DELETE may not be.
+  - >-
+    `reviewMode` / `ruleReview` / `approvedBy` on rule expose an approval workflow — a rule
+    can be staged for human review rather than enforced immediately.
+dry_run_mode:
+  supported: false
+  note: >-
+    No dry-run, validate-only, preview or simulate parameter is declared on any mutating
+    operation, and no such query parameter appears in the contract. An agent cannot rehearse
+    a firewall-policy change against this API.
+cross_links:
+  errors: errors/zero-networks-problem-types.yml
+  lifecycle: lifecycle/zero-networks-lifecycle.yml
+  authentication: authentication/zero-networks-authentication.yml
+  rate_limits: rate-limits/zero-networks-rate-limits.yml
+  data_model: data-model/zero-networks-data-model.yml

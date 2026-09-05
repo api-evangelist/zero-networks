@@ -1,0 +1,32 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  openapi/zero-networks-platform-openapi.yaml + live unauthenticated probe of
+  https://portal.zeronetworks.com/api/v1/audit (2026-09-04/05) + search of the public
+  Zero Networks surface for a published limits reference
+limit_count: 0
+limits: []
+headers: []
+exhaustion_status: null
+retry_after: false
+note: >-
+  Zero Networks publishes no rate limits. The contract declares no 429 response on any of
+  the 40 documented operations, no X-RateLimit-*, RateLimit-* or Retry-After header on any
+  response object, and no throttling prose exists on any public page. A live unauthenticated
+  request to https://portal.zeronetworks.com/api/v1/audit returns a 401 with no rate-limit
+  headers in the response, so nothing could be observed on the wire either — but note that
+  an unauthenticated 401 is a weak observation point, because limits on this API are far
+  more likely to be enforced per-token after authentication. Any real limits live behind
+  the console-issued API token and, if documented at all, inside the Cloudflare-gated help
+  center at support.zeronetworks.com, which returns 403 to every crawler request. An agent
+  integrating this API has no runtime backpressure signal to read and must implement blind
+  exponential backoff. This is an honest zero, not an unchecked field.
+evidence:
+- url: https://portal.zeronetworks.com/api/v1/audit
+  status: 401
+  finding: JSON error envelope returned; no RateLimit-*, X-RateLimit-* or Retry-After header present
+- url: openapi/zero-networks-platform-openapi.yaml
+  finding: 0 of 40 operations declare a 429 response; 0 response objects declare any header
+- url: https://support.zeronetworks.com/hc/en-us
+  status: 403
+  finding: Cloudflare interstitial — any documented limits behind it were unreadable

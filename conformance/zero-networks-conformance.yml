@@ -1,0 +1,98 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  https://zeronetworks.com/ (compliance badge row, fetched 2026-09-05) +
+  openapi/zero-networks-platform-openapi.yaml
+note: >-
+  Zero Networks publishes its attestations as unlinked badge images in the homepage body and
+  footer — there is no trust center, no compliance page, and no downloadable report or
+  auditor named anywhere on the public site. The certification claims below are therefore
+  recorded at the strength the provider publishes them: an alt-text assertion, not a
+  verifiable artifact. Everything under `standards` is derived from the contract itself.
+certifications:
+- name: SOC 2 Type 2
+  claimed: true
+  evidence: 'https://zeronetworks.com/ — <img alt="SOC 2 Type 2" src="/assets/images/icon-soc-2.svg">'
+  report_available: false
+  auditor_named: false
+- name: GDPR
+  claimed: true
+  evidence: 'https://zeronetworks.com/ — <img alt="GDPR" src="/assets/images/icon-gdpr.svg">'
+  supporting_document: https://zeronetworks.com/legal/privacy-policy
+  note: A privacy policy is published; no DPA, sub-processor list or transfer-mechanism statement was found.
+- name: PCI DSS
+  claimed: true
+  evidence: 'https://zeronetworks.com/ — <img alt="PCI DSS Compliant" src="/assets/images/icon-pci.svg">'
+  level_stated: false
+  aoc_available: false
+- name: ISO 27001
+  claimed: false
+  note: Checked, not claimed anywhere on the public surface.
+- name: FedRAMP
+  claimed: false
+  note: Checked, not claimed anywhere on the public surface.
+- name: HIPAA
+  claimed: false
+  note: Checked, not claimed anywhere on the public surface.
+standards:
+- id: oauth2
+  conforms: false
+  evidence: >-
+    openapi/zero-networks-platform-openapi.yaml — components.securitySchemes declares one
+    scheme, api_key (apiKey in header). No oauth2 flow object exists in the contract, and
+    /.well-known/oauth-authorization-server returns 404 on every host.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on zeronetworks.com, www, and portal.zeronetworks.com (probed 2026-09-05).
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    Every 4xx/5xx response is application/json carrying components.schemas.error
+    ({error, message}). No application/problem+json media type appears in the contract.
+- id: rfc8594
+  conforms: false
+  evidence: No Sunset or Deprecation response header is declared on any of the 40 operations.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No Idempotency-Key or equivalent client-supplied request key is declared on any of the
+    29 mutating operations. See conventions/zero-networks-conventions.yml.
+- id: pagination
+  conforms: false
+  evidence: >-
+    No documented GET declares a cursor, offset, page or limit parameter.
+    CustomGroupMembers_List returns a bare array.
+- id: openapi
+  conforms: true
+  version: 3.0.1
+  evidence: >-
+    openapi/zero-networks-platform-openapi.yaml — a real first-party OpenAPI 3.0.1 contract
+    published from the vendor's own GitHub organization and used to generate its Python,
+    PowerShell and Terraform clients via Speakeasy.
+  caveat: >-
+    1,556 of the 1,596 declared path items are published empty, so the contract describes
+    2.5% of the surface it advertises.
+- id: scim
+  conforms: false
+  evidence: >-
+    No urn:ietf:params:scim:schemas URN and no /scim path appears in the contract. Identity
+    provisioning is handled through the platform's own /users and /groups surfaces and
+    directory connectors, not SCIM.
+- id: json:api
+  conforms: false
+  evidence: No application/vnd.api+json media type or JSON:API envelope appears in the contract.
+domain_standards:
+- id: null
+  conforms: false
+  evidence: >-
+    Checked and none found. Network security / microsegmentation has no interoperability
+    contract standard of the kind the rubric rewards (no SCIM URN, OData $metadata,
+    OpenRTB, Sparkplug, ActivityPub, LTI/OneRoster, OAI-PMH, HL7v2/X12/ISO-20022 shape is
+    present or applicable). The nearest adjacent standards in this market are consumption
+    formats — OCSF, STIX/TAXII, Sigma and syslog/CEF for the SIEM export surface. The
+    contract does declare a SIEM export family at /settings/events-receiver/configuration
+    including a per-event-type data-structure endpoint, and the vendor maintains a public
+    fork of the Sigma detection-rule project at github.com/zeronetworks/sigma, but neither
+    the export format nor a named standard is declared in the published contract, so no
+    domain-standard conformance is asserted. Reward-only check — nothing is claimed here
+    that the contract does not show.

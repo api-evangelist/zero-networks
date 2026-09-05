@@ -1,0 +1,162 @@
+generated: '2026-09-05'
+method: derived
+source: openapi/zero-networks-platform-openapi.yaml (components.schemas $ref graph + id-reference fields)
+note: >-
+  The contract defines 598 component schemas, but only 18 are referenced directly by the 40
+  documented operations and 68 fall inside their transitive $ref closure — the other 530
+  describe the 1,556 path items published with no operation object. The graph below is the
+  documented core: the segmentation policy model. Zero Networks has no exposed "customer"
+  or "account" root — everything is scoped implicitly to the tenant that owns the API token,
+  so there is no tenant entity to model. Relationships are inferred from *Id / *IdsList
+  fields and $ref links; the contract publishes no id-prefix scheme (ids are opaque strings,
+  not typed prefixes like Stripe's), and no docs page enumerates them.
+entities:
+- name: asset
+  description: >-
+    A protected machine (server, workstation, OT/IoT device, switch, firewall). The atom the
+    whole platform segments around. Only one documented operation touches it —
+    Assets_Search (GET /assets/searchId), which resolves an FQDN to an assetId. The full
+    asset object has 588 declared paths and zero documented operations.
+  id_field: assetId
+  operations: [Assets_Search]
+- name: rule
+  description: >-
+    An inbound or outbound segmentation firewall rule — the platform's central object. 47
+    properties covering action, direction, state, ruleClass, enforcementSource, port and
+    service lists, local/remote entity bindings, source-user bindings, review workflow
+    (reviewMode, ruleReview, suggestionReason, suggestionType, approvedBy/approvedAt),
+    change-ticket linkage, expiry and soft-delete audit fields.
+  id_field: id
+  operations: [InboundRules_Create, InboundRule_Get, InboundRule_Update, InboundRule_Delete, OutboundRules_Create, OutboundRule_Get, OutboundRule_Update, OutboundRule_Delete]
+- name: rpcRule
+  description: >-
+    An RPC-layer rule for the RPC Firewall, restricting specific interface UUIDs and
+    operation numbers between assets — the domain-controller protection surface.
+  id_field: id
+  operations: [RPCRules_Create, RPCRule_Get, RPCRule_Update, RPCRule_Delete]
+- name: reactivePolicy
+  description: >-
+    An MFA (just-in-time) policy. Named "reactive" in the contract and "MFA policy" in the
+    SDKs. Binds source entities/users to a destination entity + port/protocol and requires
+    multi-factor authentication before the port is opened for ruleDuration.
+  id_field: id
+  operations: [MFAInboundPolicies_Create, MFAInboundPolicies_Get, MFAInboundPolicies_Update, MFAInboundPolicies_Delete, MFAOutboundPolicies_Create, MFAOutboundPolicies_Get, MFAOutboundPolicies_Update, MFAOutboundPolicies_Delete]
+- name: internalAccessPolicy
+  description: >-
+    A user-to-asset internal access grant — source users to one destination asset on named
+    ports/processes for a ruleDuration.
+  id_field: id
+  operations: [InternalAccessPolicy_Create, InternalAccessPolicy_Get, InternalAccessPolicy_Update, InternalAccessPolicy_Delete]
+- name: aeExclusion
+  description: >-
+    An Automation Engine exclusion — tells the rule-learning automation not to generate
+    policy for a given inbound or outbound flow. Inbound and outbound are separate
+    endpoints sharing one aeExclusionRuleBody/aeExclusionRuleResponse pair.
+  id_field: ruleId
+  operations: [AEExclusionsInbound_Create, AEExclusionsInbound_Get, AEExclusionsInbound_Update, AEExclusionsInbound_Delete, AEExclusionsOutbound_Create, AEExclusionsOutbound_Get, AEExclusionsOutbound_Update, AEExclusionsOutbound_Delete]
+- name: customGroup
+  description: >-
+    A user-defined grouping of assets or identities used as a rule target. Carries
+    createdAt/updatedAt/addedBy audit fields, a directMembersCount, a hasProtectionPolicy
+    flag, and AD-style identity fields (domain, sid, principalName, role).
+  id_field: id
+  operations: [CustomGroups_Create, CustomGroups_Get, CustomGroups_Update, CustomGroups_Delete]
+- name: customGroupMember
+  description: >-
+    Membership edge between a customGroup and an asset or identity, addressed as a
+    sub-collection and manipulated in bulk through a membersId array.
+  id_field: membersId
+  operations: [CustomGroupMembers_List, CustomGroupsMembers_Add, CustomGroupsMembers_Delete]
+relationships:
+- from: rule
+  to: asset
+  type: belongs_to
+  via: localEntityId
+  note: The protected (local) side of the rule. multipleLocalEntityIdsList carries the many-local variant.
+- from: rule
+  to: asset
+  type: has_many
+  via: remoteEntityIdsList
+  note: The peers the rule allows or blocks; resolved objects mirror into remoteEntityInfos.
+- from: rule
+  to: customGroup
+  type: has_many
+  via: remoteEntityIdsList
+  note: >-
+    Entity ids are polymorphic — an entity id may address an asset, a group or an encoded
+    IP/subnet (see the /entities/encode-ip, /entities/encode-ip-range and
+    /entities/encode-subnet paths the Terraform overlay names). The contract does not carry
+    a discriminator, so a client cannot tell the referent type from the id alone.
+- from: rule
+  to: rule
+  type: belongs_to
+  via: parentId
+  note: parentType/parentSwitchRuleId/parentSwitchRuleType carry rules generated from a switch rule.
+- from: rule
+  to: user
+  type: has_many
+  via: srcUsersList
+  note: Source-identity scoping; resolved into srcUsersInfos.
+- from: rpcRule
+  to: asset
+  type: belongs_to
+  via: localAssetId
+- from: rpcRule
+  to: asset
+  type: has_many
+  via: remoteAssetIdsList
+- from: rpcRule
+  to: asset
+  type: has_many
+  via: excludedAssetIdsList
+- from: rpcRule
+  to: user
+  type: has_many
+  via: userIdsList
+- from: rpcRule
+  to: rpcRule
+  type: belongs_to
+  via: parentId
+- from: internalAccessPolicy
+  to: asset
+  type: belongs_to
+  via: dstAssetId
+- from: internalAccessPolicy
+  to: user
+  type: has_many
+  via: srcUserIdsList
+- from: reactivePolicy
+  to: asset
+  type: belongs_to
+  via: dstEntityInfo
+- from: reactivePolicy
+  to: asset
+  type: has_many
+  via: srcEntityInfos
+- from: reactivePolicy
+  to: asset
+  type: has_many
+  via: excludedSrcEntityInfos
+- from: reactivePolicy
+  to: user
+  type: has_many
+  via: srcUserInfos
+- from: customGroup
+  to: customGroupMember
+  type: has_many
+  via: membersId
+- from: aeExclusion
+  to: asset
+  type: belongs_to
+  via: localEntityId
+counts:
+  schemas_in_spec: 598
+  schemas_reachable_from_documented_operations: 68
+  schemas_referenced_directly_by_operations: 18
+  entities_modeled: 8
+  relationships_modeled: 18
+gaps:
+- No id-prefix or typed-identifier scheme is published; every id is an opaque string.
+- Entity ids are polymorphic across asset / group / encoded-network without a discriminator.
+- The asset schema itself is declared with no properties in the published contract.
+- No pagination envelope schema is reachable from the 40 documented operations.

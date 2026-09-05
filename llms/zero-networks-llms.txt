@@ -1,0 +1,58 @@
+# Zero Networks
+
+> Zero Networks helps organizations prevent attacks, minimize blast radius, and maintain business continuity – even when attackers get inside.
+
+## Platform
+- [The Zero Networks Platform](https://zeronetworks.com/platform): Fully automated for Zero Trust segmentation and remote access
+- [Network Segmentation](https://zeronetworks.com/platform/network-segmentation): Radically simple segmentation in a click
+- [Identity Segmentation](https://zeronetworks.com/platform/identity-segmentation): Restrict admin and service account access to operational needs only
+- [Secure Remote Access](https://zeronetworks.com/platform/secure-remote-access): The speed of VPN and the security of ZTNA combined
+- [AI Segmentation](https://zeronetworks.com/platform/ai-capabilities): Stop AI lateral movement automatically
+- [Network Map](https://zeronetworks.com/platform/network-map): Network Map shows you what’s happening live across every asset, identity, and environment
+- [Integrations](https://zeronetworks.com/platform/integrations)
+
+## Use Cases
+- [Block Ransomware](https://zeronetworks.com/use-cases/block-ransomware): Lock down lateral movement and leave hackers stranded with multi-factor segmentation
+- [Protect Service Accounts](https://zeronetworks.com/use-cases/discover-and-protect-service-accounts): Prevent service account abuse and lateral movement by automatically restricting logon rights to operational needs only
+- [Enforce MFA on Admin Accounts](https://zeronetworks.com/use-cases/restrict-admin-accounts): Easily monitor and control admin logons to temporarily allow privileged access after multi-factor authentication
+- [Apply MFA to Anything](https://zeronetworks.com/use-cases/apply-mfa-to-anything): Implement automated, agentless, MFA-powered microsegmentation
+- [Segment Every Asset](https://zeronetworks.com/use-cases/segmenting-every-asset): Zero Networks restricts access to essential assets only and applies just-in-time MFA
+- [Safeguard Domain Controllers](https://zeronetworks.com/use-cases/enhance-domain-controller-security): Safeguard Domain Controllers against unauthorized access and potential cyber threats – without interrupting operations – with RPC Firewall
+- [Replace VPN with ZTNA](https://zeronetworks.com/use-cases/replace-vpn-with-ztna): Connect remote employees and third parties to the network with zero trust principles and zero performance impact
+- [Connect Remote Users](https://zeronetworks.com/use-cases/connect-remote-users): Combine the speed of VPN and the security of ZTNA – without their flaws
+- [Protect Third Party Access](https://zeronetworks.com/use-cases/limit-3rd-party-access): Seamlessly mitigate security, data privacy, compliance, and regulatory concerns when connecting external entities to the organization
+- [Pass a Pen Test](https://zeronetworks.com/use-cases/pen-test): Zero Networks leverages automated segmentation and MFA to restrict excessive network and privileged permissions, the root cause of most successful attacks (and failed pen tests)
+- [Comply with Cyber Insurance](https://zeronetworks.com/use-cases/comply-with-cyber-insurance): Boost your audit scores, pass every pen test, and check the compliance boxes
+- [Reduce Security OpEx](https://zeronetworks.com/use-cases/reduce-security-opex): Zero Networks cuts the costs associated with long deployment times, manual rule creation, ongoing maintenance, and more
+
+## Customer Stories
+- [Customer Stories](https://zeronetworks.com/company/customer-stories): From global shipping and finance to retail and manufacturing, Zero helps organizations prevent attacks, contain breaches, and maintain business continuit
+- [C.R. England](https://zeronetworks.com/company/customer-stories/protecting-the-systems-that-keep-a-24-7-food-supply-moving): Protecting the systems that keep a 24/7 food supply moving
+- [MSC](https://zeronetworks.com/company/customer-stories/securing-the-infrastructure-behind-21-of-global-shipping): Securing the infrastructure behind 21% of global shipping
+- [Vermeer](https://zeronetworks.com/company/customer-stories/automated-policy-creation-with-zero-false-positives): Automated policy creation with zero false positives
+- [Great Clips](https://zeronetworks.com/company/customer-stories/contained-lateral-movement-across-4500-locations): Contained lateral movement across 4,500+ locations
+- [Evercore](https://zeronetworks.com/company/customer-stories/block-lateral-movement-and-control-every-network-identity): Blocked lateral movement and controlled every network identity
+- [Baron Funds](https://zeronetworks.com/company/customer-stories/replaced-an-overly-complex-microsegmentation-solution): Replaced an overly complex microsegmentation solution without disrupting critical financial systems
+- [ACT](https://zeronetworks.com/company/customer-stories/automated-microsegmentation-in-30-days): ACT Commodities
+automated microsegmentation in 30 days
+- [ACI](https://zeronetworks.com/company/customer-stories/100-improvement-in-network-performance-and-reliability): 100% improvement in network performance and reliability
+- [Abacus Group](https://zeronetworks.com/company/customer-stories/enhanced-security-for-700-partner-clients): Enhanced security for 700+ partner clients
+
+## Resources
+- [Resource Center](https://zeronetworks.com/resource-center): Tools and resources to simplify network security
+- [Blog](https://zeronetworks.com/blog)
+- [Brochures](https://zeronetworks.com/resource-center/brochures)
+- [Case Studies](https://zeronetworks.com/resource-center/case-studies)
+- [Guides](https://zeronetworks.com/resource-center/guides)
+- [Infographics](https://zeronetworks.com/resource-center/infographics)
+- [Videos](https://zeronetworks.com/resource-center/videos)
+- [Webinars](https://zeronetworks.com/resource-center/webinars)
+- [Reports](https://zeronetworks.com/resource-center/white-papers)
+- [Zero Trust for OT Systems](https://zeronetworks.com/resource-center/topics/applying-zero-trust-to-ot-systems-with-microsegmentation): Applying Zero Trust to OT systems with microsegmentation
+- [Network Segmentation](https://zeronetworks.com/resource-center/topics/network-segmentation-microsegmentation-isolating-securing-your-network): A deep dive into isolating and securing your network
+- [Zero Trust Architecture](https://zeronetworks.com/resource-center/topics/zero-trust-architecture-how-to-achieve-cyber-resilience): How to achieve cyber resilience
+- [Block Lateral Movement](https://zeronetworks.com/resource-center/topics/lateral-movement-innovations-prevention-techniques): Key innovations and prevention techniques for lateral movement
+- [Cyber Resilience](https://zeronetworks.com/resource-center/topics/zero-trust-architecture-how-to-achieve-cyber-resilience): How to achieve cyber resilience with a Zero Trust architecture
+
+## Optional
+- [Sitemap index](https://zeronetworks.com/sitemap.xml)

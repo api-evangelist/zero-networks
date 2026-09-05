@@ -1,0 +1,225 @@
+generated: '2026-09-05'
+method: derived
+source: openapi/zero-networks-platform-openapi.yaml
+status: candidate
+note: Zero Networks publishes no MCP server. Searched the vendor site, llms.txt, the zeronetworks GitHub
+  organization (19 repos), PyPI, npm and the public MCP server directories on 2026-09-05 and found none;
+  no hosted endpoint and no stdio package exist. The tools below are a CANDIDATE surface DERIVED from
+  the 40 documented operations in the provider's own OpenAPI - nobody ships this. Every tool inherits
+  its input schema from the backing operation's parameters and requestBody in that spec. Auth would be
+  the same console-issued API token the REST API uses (Authorization header). 29 of the 40 operations
+  are mutating (9 POST, 10 PUT, 10 DELETE) and none is idempotent-keyed, so a real server would need
+  write confirmation on everything except the 11 GETs.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: searched
+server:
+  name: zero-networks (candidate)
+  transport: null
+  base_url: https://portal.zeronetworks.com/api/v1
+tool_count: 40
+tools:
+- name: zero_networks_assets_search
+  description: Search Asset by FQDN
+  rest: Assets_Search
+  http: GET /assets/searchId
+  read_only: true
+- name: zero_networks_customgroups_create
+  description: Create Custom Group
+  rest: CustomGroups_Create
+  http: POST /groups/custom
+  read_only: false
+- name: zero_networks_customgroups_get
+  description: Get a custom group
+  rest: CustomGroups_Get
+  http: GET /groups/custom/{groupId}
+  read_only: true
+- name: zero_networks_customgroups_update
+  description: Update Custom Group
+  rest: CustomGroups_Update
+  http: PUT /groups/custom/{groupId}
+  read_only: false
+- name: zero_networks_customgroups_delete
+  description: Delete Custom Group
+  rest: CustomGroups_Delete
+  http: DELETE /groups/custom/{groupId}
+  read_only: false
+- name: zero_networks_customgroupmembers_list
+  description: List Custom Group members
+  rest: CustomGroupMembers_List
+  http: GET /groups/custom/{groupId}/members
+  read_only: true
+- name: zero_networks_customgroupsmembers_add
+  description: Add Custom Group members
+  rest: CustomGroupsMembers_Add
+  http: PUT /groups/custom/{groupId}/members
+  read_only: false
+- name: zero_networks_customgroupsmembers_delete
+  description: Delete Custom Group members
+  rest: CustomGroupsMembers_Delete
+  http: DELETE /groups/custom/{groupId}/members
+  read_only: false
+- name: zero_networks_aeexclusionsinbound_create
+  description: Create AE Exclusion Inbound
+  rest: AEExclusionsInbound_Create
+  http: POST /protection/ae-exclusions/inbound
+  read_only: false
+- name: zero_networks_aeexclusionsinbound_get
+  description: Get AE Exclusion
+  rest: AEExclusionsInbound_Get
+  http: GET /protection/ae-exclusions/inbound/{ruleId}
+  read_only: true
+- name: zero_networks_aeexclusionsinbound_delete
+  description: Delete Automation Engine Inbound exclusions
+  rest: AEExclusionsInbound_Delete
+  http: DELETE /protection/ae-exclusions/inbound/{ruleId}
+  read_only: false
+- name: zero_networks_aeexclusionsinbound_update
+  description: Update AE Exclusion
+  rest: AEExclusionsInbound_Update
+  http: PUT /protection/ae-exclusions/inbound/{ruleId}
+  read_only: false
+- name: zero_networks_aeexclusionsoutbound_create
+  description: Create AE Exclusion Outbound
+  rest: AEExclusionsOutbound_Create
+  http: POST /protection/ae-exclusions/outbound
+  read_only: false
+- name: zero_networks_aeexclusionsoutbound_get
+  description: Get AE Exclusion
+  rest: AEExclusionsOutbound_Get
+  http: GET /protection/ae-exclusions/outbound/{ruleId}
+  read_only: true
+- name: zero_networks_aeexclusionsoutbound_delete
+  description: Delete Automation Engine Outbound exclusions
+  rest: AEExclusionsOutbound_Delete
+  http: DELETE /protection/ae-exclusions/outbound/{ruleId}
+  read_only: false
+- name: zero_networks_aeexclusionsoutbound_update
+  description: Update AE Exclusion
+  rest: AEExclusionsOutbound_Update
+  http: PUT /protection/ae-exclusions/outbound/{ruleId}
+  read_only: false
+- name: zero_networks_internalaccesspolicy_create
+  description: Create an internal access policy
+  rest: InternalAccessPolicy_Create
+  http: POST /protection/internal-access/policies
+  read_only: false
+- name: zero_networks_internalaccesspolicy_get
+  description: Get an Internal Access policy
+  rest: InternalAccessPolicy_Get
+  http: GET /protection/internal-access/policies/{policyId}
+  read_only: true
+- name: zero_networks_internalaccesspolicy_update
+  description: Update an Internal Access policy
+  rest: InternalAccessPolicy_Update
+  http: PUT /protection/internal-access/policies/{policyId}
+  read_only: false
+- name: zero_networks_internalaccesspolicy_delete
+  description: Delete an Internal Access policy
+  rest: InternalAccessPolicy_Delete
+  http: DELETE /protection/internal-access/policies/{policyId}
+  read_only: false
+- name: zero_networks_mfainboundpolicies_create
+  description: Add Inbound MFA Policy
+  rest: MFAInboundPolicies_Create
+  http: POST /protection/reactive-policies/inbound
+  read_only: false
+- name: zero_networks_mfainboundpolicies_get
+  description: Get Inbound MFA Policy
+  rest: MFAInboundPolicies_Get
+  http: GET /protection/reactive-policies/inbound/{reactivePolicyId}
+  read_only: true
+- name: zero_networks_mfainboundpolicies_update
+  description: Update Inbound MFA Policy
+  rest: MFAInboundPolicies_Update
+  http: PUT /protection/reactive-policies/inbound/{reactivePolicyId}
+  read_only: false
+- name: zero_networks_mfainboundpolicies_delete
+  description: Remove Inbound MFA Policy
+  rest: MFAInboundPolicies_Delete
+  http: DELETE /protection/reactive-policies/inbound/{reactivePolicyId}
+  read_only: false
+- name: zero_networks_mfaoutboundpolicies_create
+  description: Add Outbound MFA Policy
+  rest: MFAOutboundPolicies_Create
+  http: POST /protection/reactive-policies/outbound
+  read_only: false
+- name: zero_networks_mfaoutboundpolicies_get
+  description: Get Outbound MFA Policy
+  rest: MFAOutboundPolicies_Get
+  http: GET /protection/reactive-policies/outbound/{reactivePolicyId}
+  read_only: true
+- name: zero_networks_mfaoutboundpolicies_update
+  description: Update Outbound MFA Policy
+  rest: MFAOutboundPolicies_Update
+  http: PUT /protection/reactive-policies/outbound/{reactivePolicyId}
+  read_only: false
+- name: zero_networks_mfaoutboundpolicies_delete
+  description: Remove Outbound MFA Policy
+  rest: MFAOutboundPolicies_Delete
+  http: DELETE /protection/reactive-policies/outbound/{reactivePolicyId}
+  read_only: false
+- name: zero_networks_rpcrules_create
+  description: Create RPC Rule
+  rest: RPCRules_Create
+  http: POST /protection/rpc-rules
+  read_only: false
+- name: zero_networks_rpcrule_get
+  description: Get RPC Rule
+  rest: RPCRule_Get
+  http: GET /protection/rpc-rules/{ruleId}
+  read_only: true
+- name: zero_networks_rpcrule_update
+  description: Update RPC Rule
+  rest: RPCRule_Update
+  http: PUT /protection/rpc-rules/{ruleId}
+  read_only: false
+- name: zero_networks_rpcrule_delete
+  description: Remove RPC Rule
+  rest: RPCRule_Delete
+  http: DELETE /protection/rpc-rules/{ruleId}
+  read_only: false
+- name: zero_networks_inboundrules_create
+  description: Create Inbound Rule
+  rest: InboundRules_Create
+  http: POST /protection/rules/inbound
+  read_only: false
+- name: zero_networks_inboundrule_get
+  description: Get Inbound Rule
+  rest: InboundRule_Get
+  http: GET /protection/rules/inbound/{ruleId}
+  read_only: true
+- name: zero_networks_inboundrule_update
+  description: Update Inbound Rule
+  rest: InboundRule_Update
+  http: PUT /protection/rules/inbound/{ruleId}
+  read_only: false
+- name: zero_networks_inboundrule_delete
+  description: Remove Inbound Rule
+  rest: InboundRule_Delete
+  http: DELETE /protection/rules/inbound/{ruleId}
+  read_only: false
+- name: zero_networks_outboundrules_create
+  description: Create Outbound Rule
+  rest: OutboundRules_Create
+  http: POST /protection/rules/outbound
+  read_only: false
+- name: zero_networks_outboundrule_get
+  description: Get Outbound Rule
+  rest: OutboundRule_Get
+  http: GET /protection/rules/outbound/{ruleId}
+  read_only: true
+- name: zero_networks_outboundrule_update
+  description: Update Outbound Rule
+  rest: OutboundRule_Update
+  http: PUT /protection/rules/outbound/{ruleId}
+  read_only: false
+- name: zero_networks_outboundrule_delete
+  description: Remove Outbound Rule
+  rest: OutboundRule_Delete
+  http: DELETE /protection/rules/outbound/{ruleId}
+  read_only: false
