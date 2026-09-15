@@ -1,17 +1,15 @@
 aid: zero-networks
 name: Zero Networks
-description: 'Zero Networks is an Israeli-American network security company whose Segment
-  platform delivers automated, agentless microsegmentation and identity segmentation for
-  enterprise networks. It builds a host-based firewall "bubble" around every asset, learns
-  normal east-west traffic for 30 days, then auto-generates least-privilege allow rules and
-  closes privileged ports behind just-in-time multi-factor authentication — extending MFA to
-  protocols such as RDP, SSH, SMB, WinRM and RPC that were never designed for it. The platform
-  also covers identity segmentation for admin and service accounts, Kubernetes segmentation,
-  OT/IoT assets, and a ZTNA-style secure remote access product that replaces VPN. Zero Networks
-  operates a customer-facing REST API at portal.zeronetworks.com/api/v1 secured with an
-  Authorization API token issued from the console, and publishes a first-party OpenAPI 3.0.1
-  contract plus Speakeasy-generated Python, PowerShell and Terraform clients from its own
-  GitHub organization.'
+description: Zero Networks is an Israeli-American network security company whose Segment platform delivers
+  automated, agentless microsegmentation and identity segmentation for enterprise networks. It builds
+  a host-based firewall "bubble" around every asset, learns normal east-west traffic for 30 days, then
+  auto-generates least-privilege allow rules and closes privileged ports behind just-in-time multi-factor
+  authentication — extending MFA to protocols such as RDP, SSH, SMB, WinRM and RPC that were never designed
+  for it. The platform also covers identity segmentation for admin and service accounts, Kubernetes segmentation,
+  OT/IoT assets, and a ZTNA-style secure remote access product that replaces VPN. Zero Networks operates
+  a customer-facing REST API at portal.zeronetworks.com/api/v1 secured with an Authorization API token
+  issued from the console, and publishes a first-party OpenAPI 3.0.1 contract plus Speakeasy-generated
+  Python, PowerShell and Terraform clients from its own GitHub organization.
 url: https://raw.githubusercontent.com/api-evangelist/zero-networks/refs/heads/main/apis.yml
 image: https://zeronetworks.com/favicon.ico
 x-type: company
@@ -31,15 +29,14 @@ tags:
 - Kubernetes
 - Cybersecurity
 apis:
-- aid: zero-networks-platform
+- aid: zero-networks:zero-networks-platform
   name: Zero Networks Platform API
-  description: 'The Zero Networks platform REST API, exposing the segmentation and identity
-    control surface of the Zero Networks console: assets and asset protection state, inbound
-    and outbound segmentation rules, MFA (reactive) policies, RPC rules, Automation Engine
-    exclusions, internal access policies, custom groups and group membership, users and roles,
-    Kubernetes workloads, cloud connectors, audit and network/logon activity, and platform
-    settings including webhooks and SIEM event export. Authentication is an API token minted in
-    the console under Settings > API and sent in the Authorization header.'
+  description: 'The Zero Networks platform REST API, exposing the segmentation and identity control surface
+    of the Zero Networks console: assets and asset protection state, inbound and outbound segmentation
+    rules, MFA (reactive) policies, RPC rules, Automation Engine exclusions, internal access policies,
+    custom groups and group membership, users and roles, Kubernetes workloads, cloud connectors, audit
+    and network/logon activity, and platform settings including webhooks and SIEM event export. Authentication
+    is an API token minted in the console under Settings > API and sent in the Authorization header.'
   humanURL: https://portal.zeronetworks.com/
   baseURL: https://portal.zeronetworks.com/api/v1
   image: https://zeronetworks.com/favicon.ico
