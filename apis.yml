@@ -29,27 +29,161 @@ tags:
 - Kubernetes
 - Cybersecurity
 apis:
-- aid: zero-networks:zero-networks-platform
-  name: Zero Networks Platform API
-  description: 'The Zero Networks platform REST API, exposing the segmentation and identity control surface
-    of the Zero Networks console: assets and asset protection state, inbound and outbound segmentation
-    rules, MFA (reactive) policies, RPC rules, Automation Engine exclusions, internal access policies,
-    custom groups and group membership, users and roles, Kubernetes workloads, cloud connectors, audit
-    and network/logon activity, and platform settings including webhooks and SIEM event export. Authentication
-    is an API token minted in the console under Settings > API and sent in the Authorization header.'
+- aid: zero-networks:zero-networks-ae-exclusions-api
+  name: Zero Networks AE Exclusions API
+  description: API calls related to AE Exclusions.
   humanURL: https://portal.zeronetworks.com/
   baseURL: https://portal.zeronetworks.com/api/v1
-  image: https://zeronetworks.com/favicon.ico
   tags:
-  - Security
-  - Microsegmentation
-  - Zero Trust
-  - Segmentation
+  - AE Exclusions
   properties:
   - type: OpenAPI
-    url: openapi/zero-networks-platform-openapi.yaml
-  - type: Overlay
-    url: overlays/zero-networks-platform-overlay.yaml
+    url: openapi/zero-networks-ae-exclusions-api-openapi.yml
+  - type: Authentication
+    url: authentication/zero-networks-authentication.yml
+  - type: ErrorCatalog
+    url: errors/zero-networks-problem-types.yml
+  - type: DataModel
+    url: data-model/zero-networks-data-model.yml
+  - type: Webhooks
+    url: asyncapi/zero-networks-webhooks.yml
+- aid: zero-networks:zero-networks-assets-api
+  name: Zero Networks Assets API
+  description: API calls related to Assets.
+  humanURL: https://portal.zeronetworks.com/
+  baseURL: https://portal.zeronetworks.com/api/v1
+  tags:
+  - Assets
+  properties:
+  - type: OpenAPI
+    url: openapi/zero-networks-assets-api-openapi.yml
+  - type: Authentication
+    url: authentication/zero-networks-authentication.yml
+  - type: ErrorCatalog
+    url: errors/zero-networks-problem-types.yml
+  - type: DataModel
+    url: data-model/zero-networks-data-model.yml
+  - type: Webhooks
+    url: asyncapi/zero-networks-webhooks.yml
+- aid: zero-networks:zero-networks-groups-custom-api
+  name: Zero Networks Groups Custom API
+  description: API calls related to Custom Groups.
+  humanURL: https://portal.zeronetworks.com/
+  baseURL: https://portal.zeronetworks.com/api/v1
+  tags:
+  - Groups Custom
+  properties:
+  - type: OpenAPI
+    url: openapi/zero-networks-groups-custom-api-openapi.yml
+  - type: Authentication
+    url: authentication/zero-networks-authentication.yml
+  - type: ErrorCatalog
+    url: errors/zero-networks-problem-types.yml
+  - type: DataModel
+    url: data-model/zero-networks-data-model.yml
+  - type: Webhooks
+    url: asyncapi/zero-networks-webhooks.yml
+- aid: zero-networks:zero-networks-internal-access-policy-api
+  name: Zero Networks Internal Access Policy API
+  description: >-
+    The Internal Access Policy API from Zero Networks — 2 operation(s) for internal access policy.
+  humanURL: https://portal.zeronetworks.com/
+  baseURL: https://portal.zeronetworks.com/api/v1
+  tags:
+  - Internal Access Policy
+  properties:
+  - type: OpenAPI
+    url: openapi/zero-networks-internal-access-policy-api-openapi.yml
+  - type: Authentication
+    url: authentication/zero-networks-authentication.yml
+  - type: ErrorCatalog
+    url: errors/zero-networks-problem-types.yml
+  - type: DataModel
+    url: data-model/zero-networks-data-model.yml
+  - type: Webhooks
+    url: asyncapi/zero-networks-webhooks.yml
+- aid: zero-networks:zero-networks-mfa-inbound-api
+  name: Zero Networks MFA Inbound API
+  description: API calls related to Inbound MFA policies.
+  humanURL: https://portal.zeronetworks.com/
+  baseURL: https://portal.zeronetworks.com/api/v1
+  tags:
+  - MFA Inbound
+  properties:
+  - type: OpenAPI
+    url: openapi/zero-networks-mfa-inbound-api-openapi.yml
+  - type: Authentication
+    url: authentication/zero-networks-authentication.yml
+  - type: ErrorCatalog
+    url: errors/zero-networks-problem-types.yml
+  - type: DataModel
+    url: data-model/zero-networks-data-model.yml
+  - type: Webhooks
+    url: asyncapi/zero-networks-webhooks.yml
+- aid: zero-networks:zero-networks-mfa-outbound-api
+  name: Zero Networks MFA Outbound API
+  description: API calls related to Outbound MFA policies.
+  humanURL: https://portal.zeronetworks.com/
+  baseURL: https://portal.zeronetworks.com/api/v1
+  tags:
+  - MFA Outbound
+  properties:
+  - type: OpenAPI
+    url: openapi/zero-networks-mfa-outbound-api-openapi.yml
+  - type: Authentication
+    url: authentication/zero-networks-authentication.yml
+  - type: ErrorCatalog
+    url: errors/zero-networks-problem-types.yml
+  - type: DataModel
+    url: data-model/zero-networks-data-model.yml
+  - type: Webhooks
+    url: asyncapi/zero-networks-webhooks.yml
+- aid: zero-networks:zero-networks-rules-inbound-api
+  name: Zero Networks Rules Inbound API
+  description: API calls related to Inbound rules.
+  humanURL: https://portal.zeronetworks.com/
+  baseURL: https://portal.zeronetworks.com/api/v1
+  tags:
+  - Rules Inbound
+  properties:
+  - type: OpenAPI
+    url: openapi/zero-networks-rules-inbound-api-openapi.yml
+  - type: Authentication
+    url: authentication/zero-networks-authentication.yml
+  - type: ErrorCatalog
+    url: errors/zero-networks-problem-types.yml
+  - type: DataModel
+    url: data-model/zero-networks-data-model.yml
+  - type: Webhooks
+    url: asyncapi/zero-networks-webhooks.yml
+- aid: zero-networks:zero-networks-rules-outbound-api
+  name: Zero Networks Rules Outbound API
+  description: API calls related to Outbound rules.
+  humanURL: https://portal.zeronetworks.com/
+  baseURL: https://portal.zeronetworks.com/api/v1
+  tags:
+  - Rules Outbound
+  properties:
+  - type: OpenAPI
+    url: openapi/zero-networks-rules-outbound-api-openapi.yml
+  - type: Authentication
+    url: authentication/zero-networks-authentication.yml
+  - type: ErrorCatalog
+    url: errors/zero-networks-problem-types.yml
+  - type: DataModel
+    url: data-model/zero-networks-data-model.yml
+  - type: Webhooks
+    url: asyncapi/zero-networks-webhooks.yml
+- aid: zero-networks:zero-networks-rules-rpc-api
+  name: Zero Networks Rules RPC API
+  description: API calls related to RPC Rules
+  humanURL: https://portal.zeronetworks.com/
+  baseURL: https://portal.zeronetworks.com/api/v1
+  tags:
+  - Rules RPC
+  properties:
+  - type: OpenAPI
+    url: openapi/zero-networks-rules-rpc-api-openapi.yml
   - type: Authentication
     url: authentication/zero-networks-authentication.yml
   - type: ErrorCatalog
@@ -64,6 +198,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/zero-networks-platform-overlay.yaml
 - type: DomainSecurity
   url: security/zero-networks-domain-security.yml
 - type: Website
