@@ -1,0 +1,499 @@
+openapi: 3.2.0
+info:
+  title: Zero Networks Rules RPC API
+  version: 1.26.3
+  description: APIs for Zero Networks
+  contact:
+    name: Support
+    url: https://support.zeronetworks.com
+    email: support@zeronetworks.com
+servers:
+- url: https://portal.zeronetworks.com/v1/api
+  description: Customer URL
+  variables:
+    CustomerURL:
+      description: this value is per customer / partner
+      default: portal
+security:
+- api_key: []
+tags:
+- name: Rules RPC
+  description: API calls related to RPC Rules
+paths:
+  /protection/rpc-rules:
+    post:
+      operationId: RPCRules_Create
+      summary: Create RPC Rule
+      description: Returns the properties of the create RPC rule.
+      requestBody:
+        description: Rule properties
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rpcRuleBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcRuleResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+      - api_key: []
+      tags:
+      - Rules RPC
+      x-speakeasy-entity-operation: RPCRule#create
+  /protection/rpc-rules/{ruleId}:
+    get:
+      operationId: RPCRule_Get
+      summary: Get RPC Rule
+      description: Returns the properties of an RPC rule.
+      parameters:
+      - $ref: '#/components/parameters/ruleIdParameter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcRuleResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+      - api_key: []
+      tags:
+      - Rules RPC
+      x-speakeasy-entity-operation: RPCRule#get
+    put:
+      operationId: RPCRule_Update
+      summary: Update RPC Rule
+      description: Returns the properties of the update RPC rule.
+      parameters:
+      - $ref: '#/components/parameters/ruleIdParameter'
+      requestBody:
+        description: Rule properties
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rpcRuleBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcRuleResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+      - api_key: []
+      tags:
+      - Rules RPC
+      x-speakeasy-entity-operation: RPCRule#update
+    delete:
+      operationId: RPCRule_Delete
+      summary: Remove RPC Rule
+      description: Returns an empty object.
+      parameters:
+      - $ref: '#/components/parameters/ruleIdParameter'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+      - api_key: []
+      tags:
+      - Rules RPC
+      x-speakeasy-entity-operation: RPCRule#delete
+components:
+  schemas:
+    interfaceUuidsList:
+      type: array
+      items:
+        type: string
+        format: uuid or string
+      description: "one of the following: \n* \"rpcAnyInterface\" for any interface \n* List of interface uuids for explicit interfaces\n"
+    error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    ruleState:
+      description: '* ''1'' - Enabled
+
+        * ''2'' - Disabled
+
+        * ''3'' - Deleted By User
+
+        * ''4'' - Pending Review
+
+        * ''5'' - Pending Review Auto
+
+        * ''6'' - Rejected by User
+
+        * ''7'' - Excluded by User
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+    rpcRule:
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/ruleAction'
+        changeTicket:
+          type: string
+        createdAt:
+          $ref: '#/components/schemas/epochMillis'
+        createdBy:
+          $ref: '#/components/schemas/createdBy'
+        description:
+          type: string
+        excludedAssetIdsList:
+          type: array
+          items:
+            type: string
+        excludedAssetInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/idNamePair'
+        expiresAt:
+          $ref: '#/components/schemas/epochMillis'
+        id:
+          type: string
+        interfaceUuidsList:
+          $ref: '#/components/schemas/interfaceUuidsList'
+        localAssetId:
+          type: string
+        localAssetInfo:
+          $ref: '#/components/schemas/idNamePair'
+        name:
+          type: string
+        opNumbersList:
+          type: array
+          items:
+            type: integer
+        parentId:
+          type: string
+        parentType:
+          type: integer
+          format: int32
+        protocolsList:
+          $ref: '#/components/schemas/rpcProtocolsList'
+        remoteAssetIdsList:
+          type: array
+          items:
+            type: string
+        remoteAssetInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/idNamePair'
+        ruleClass:
+          $ref: '#/components/schemas/ruleClass'
+        state:
+          $ref: '#/components/schemas/ruleState'
+        updatedAt:
+          $ref: '#/components/schemas/epochMillis'
+        updatedBy:
+          $ref: '#/components/schemas/idNamePair'
+        userIdsList:
+          type: array
+          items:
+            type: string
+        userInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/idNamePair'
+      x-speakeasy-entity: RPCRule
+    ruleAction:
+      description: '* 1 - Allow
+
+        * 2 - Block
+
+        * 3 - Force Block
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+    createdBy:
+      type: object
+      properties:
+        createdBy:
+          $ref: '#/components/schemas/idNamePair'
+        email:
+          type: string
+        enforcementSource:
+          $ref: '#/components/schemas/enforcementSource'
+        userRole:
+          $ref: '#/components/schemas/userRole'
+    enforcementSource:
+      description: '* ''1'' - ReactivePolicy
+
+        * ''2'' - Automated
+
+        * ''3'' - AccessPortal
+
+        * ''4'' - AdminPortal
+
+        * ''5'' - AI
+
+        * ''6'' - API
+
+        * ''7'' - Setup
+
+        * ''8'' - Connect
+
+        * ''9'' - System
+
+        * ''10'' - DownloadPortal
+
+        * ''11'' - ExternalAccessPortal
+
+        * ''12'' - DayTwo
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+    rpcRuleResponse:
+      type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/rpcRule'
+    userRole:
+      description: "* '0' - Unspecified\n* '1' - Admin\n* '2' - Viewer\n* '3' - Regular\n* '4' - API-FullAccess\n* '5' - API-ReadOnly\n* '6' - SelfService\n* '7' - CloudConnectorProvisioning\n* '8' - JAMF Asset\n* '9' - Asset Manager\n* '10' - Operator\n* '11' - Service Now Token\n* '12' - Segment Server Provisioning\n* '13' - Connect Server Provisioning\n* '14' - Segment Connector Provisioning \n"
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+    ruleClass:
+      description: '* ''1'' - Trivial
+
+        * ''2'' - Permissive
+
+        * ''3'' - Privileged
+
+        * ''4'' - Critical
+
+        * ''5'' - System
+
+        * ''6'' - Preventative
+
+        * ''8'' - Dangerous
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 8
+    rpcRuleBody:
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/ruleAction'
+        changeTicket:
+          type: string
+        description:
+          type: string
+        excludedAssetIdsList:
+          type: array
+          items:
+            type: string
+        expiresAt:
+          $ref: '#/components/schemas/epochMillis'
+        interfaceUuidsList:
+          $ref: '#/components/schemas/interfaceUuidsList'
+        localAssetId:
+          type: string
+        name:
+          type: string
+        opNumbersList:
+          type: array
+          items:
+            type: integer
+        protocolsList:
+          $ref: '#/components/schemas/rpcProtocolsList'
+        remoteAssetIdsList:
+          type: array
+          items:
+            type: string
+        state:
+          $ref: '#/components/schemas/ruleState'
+        userIdsList:
+          type: array
+          items:
+            type: string
+      required:
+      - action
+      - description
+      - excludedAssetIdsList
+      - interfaceUuidsList
+      - localAssetId
+      - opNumbersList
+      - protocolsList
+      - remoteAssetIdsList
+      - state
+      - userIdsList
+      x-speakeasy-entity: RPCRule
+    idNamePair:
+      type: object
+      properties:
+        id:
+          description: EntityId
+          type: string
+        name:
+          description: Entity Name
+          type: string
+    rpcProtocolsList:
+      type: array
+      items:
+        type: integer
+      description: '* NULL - Any
+
+        * ''1'' - Rules RPC over SMB
+
+        * ''2'' - Rules RPC over TCP
+
+        '
+    epochMillis:
+      description: Epoch Millis
+      type: integer
+      format: int64
+      title: epochMillis
+  parameters:
+    ruleIdParameter:
+      name: ruleId
+      in: path
+      description: The id of the rule
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: d37077dc-0660-454d-81a0-f52f491fd5b8
+      x-speakeasy-name-override: id
+  responses:
+    '409':
+      description: Already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '500':
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: Authorization
+      in: header

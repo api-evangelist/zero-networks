@@ -1,0 +1,37 @@
+{
+  "provider": "zero-networks",
+  "sources": [
+    "_original/zero-networks-platform-openapi.yaml"
+  ],
+  "outputs": [
+    "zero-networks-ae-exclusions-api-openapi.yml",
+    "zero-networks-assets-api-openapi.yml",
+    "zero-networks-groups-custom-api-openapi.yml",
+    "zero-networks-internal-access-policy-api-openapi.yml",
+    "zero-networks-mfa-inbound-api-openapi.yml",
+    "zero-networks-mfa-outbound-api-openapi.yml",
+    "zero-networks-rules-inbound-api-openapi.yml",
+    "zero-networks-rules-outbound-api-openapi.yml",
+    "zero-networks-rules-rpc-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "zero-networks-platform-openapi.yaml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "zero-networks-platform-openapi.yaml: declared missing tag: Internal Access Policy",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "zero-networks-ae-exclusions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zero-networks-assets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zero-networks-groups-custom-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zero-networks-internal-access-policy-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zero-networks-mfa-inbound-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zero-networks-mfa-outbound-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zero-networks-rules-inbound-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zero-networks-rules-outbound-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zero-networks-rules-rpc-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

@@ -1,0 +1,110 @@
+openapi: 3.2.0
+info:
+  title: Zero Networks Assets API
+  version: 1.26.3
+  description: APIs for Zero Networks
+  contact:
+    name: Support
+    url: https://support.zeronetworks.com
+    email: support@zeronetworks.com
+servers:
+- url: https://portal.zeronetworks.com/v1/api
+  description: Customer URL
+  variables:
+    CustomerURL:
+      description: this value is per customer / partner
+      default: portal
+security:
+- api_key: []
+tags:
+- name: Assets
+  description: API calls related to Assets.
+paths:
+  /assets/searchId:
+    get:
+      operationId: Assets_Search
+      summary: Search Asset by FQDN
+      description: Returns an assetId.
+      parameters:
+      - $ref: '#/components/parameters/fqdnParameter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetIdSearch'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+      - api_key: []
+      tags:
+      - Assets
+      x-speakeasy-entity-operation: AssetId#get
+components:
+  responses:
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '500':
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+  schemas:
+    assetIdSearch:
+      type: object
+      properties:
+        assetId:
+          type: string
+      x-speakeasy-entity: AssetId
+    error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  parameters:
+    fqdnParameter:
+      name: fqdn
+      in: query
+      description: fully qualified domain name
+      schema:
+        type: string
+      example: server.domain.local
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: Authorization
+      in: header

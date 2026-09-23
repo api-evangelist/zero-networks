@@ -1,0 +1,2373 @@
+openapi: 3.2.0
+info:
+  title: Zero Networks Rules Inbound API
+  version: 1.26.3
+  description: APIs for Zero Networks
+  contact:
+    name: Support
+    url: https://support.zeronetworks.com
+    email: support@zeronetworks.com
+servers:
+- url: https://portal.zeronetworks.com/v1/api
+  description: Customer URL
+  variables:
+    CustomerURL:
+      description: this value is per customer / partner
+      default: portal
+security:
+- api_key: []
+tags:
+- name: Rules Inbound
+  description: API calls related to Inbound rules.
+paths:
+  /protection/rules/inbound:
+    post:
+      operationId: InboundRules_Create
+      summary: Create Inbound Rule
+      description: Returns the properties of the created Inbound rule.
+      requestBody:
+        description: Rule properties
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ruleBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ruleResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+      - api_key: []
+      tags:
+      - Rules Inbound
+      x-speakeasy-entity-operation: InboundRule#create
+  /protection/rules/inbound/{ruleId}:
+    get:
+      operationId: InboundRule_Get
+      summary: Get Inbound Rule
+      description: Returns the properties of an Inbound rule.
+      parameters:
+      - $ref: '#/components/parameters/ruleIdParameter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ruleItem'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+      - api_key: []
+      tags:
+      - Rules Inbound
+      x-speakeasy-entity-operation: InboundRule#get
+    put:
+      operationId: InboundRule_Update
+      summary: Update Inbound Rule
+      description: Returns the properties of the update Inbound rule.
+      parameters:
+      - $ref: '#/components/parameters/ruleIdParameter'
+      requestBody:
+        description: Rule properties
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ruleBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ruleResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+      - api_key: []
+      tags:
+      - Rules Inbound
+      x-speakeasy-entity-operation: InboundRule#update
+    delete:
+      operationId: InboundRule_Delete
+      summary: Remove Inbound Rule
+      description: Returns an empty object.
+      parameters:
+      - $ref: '#/components/parameters/ruleIdParameter'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+      - api_key: []
+      tags:
+      - Rules Inbound
+      x-speakeasy-entity-operation: InboundRule#delete
+components:
+  schemas:
+    state:
+      type: object
+      properties:
+        assetId:
+          type: string
+        identityProtectedAt:
+          $ref: '#/components/schemas/epochMillis'
+        identityProtectionState:
+          $ref: '#/components/schemas/identityProtectionState'
+        isAssetConnected:
+          type: boolean
+        lastConnectedAt:
+          $ref: '#/components/schemas/epochMillis'
+        lastDisconnectedAt:
+          $ref: '#/components/schemas/epochMillis'
+        protectedAt:
+          $ref: '#/components/schemas/epochMillis'
+        protectionState:
+          $ref: '#/components/schemas/protectionState'
+        protectAt:
+          $ref: '#/components/schemas/epochMillis'
+        identityProtectAt:
+          $ref: '#/components/schemas/epochMillis'
+        rpcProtectionState:
+          $ref: '#/components/schemas/protectionState'
+        rpcProtectAt:
+          $ref: '#/components/schemas/epochMillis'
+        rpcProtectedAt:
+          $ref: '#/components/schemas/epochMillis'
+    error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    ruleSuggestionType:
+      description: '* ''0'' - Unspecified
+
+        * ''1'' - Create
+
+        * ''2'' - Delete
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+    ruleResponse:
+      type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/rule'
+    assetType:
+      description: "Possible asset status:\n  * '0' - Unknown\n  * '1' - Client\n  * '2' - Server\n  * '3' - Virtual cluster\n  * '4' - IP camera\n  * '5' - Smart TV\n  * '6' - Factory controller\n  * '7' - Medical device\n  * '8' - Printer\n  * '9' - Scanner\n  * '10' - Smart card reader\n  * '11' - Router\n  * '12' - Hypervisor\n  * '13' - PLC\n  * '14' - HMI\n  * '15' - Switch\n  * '16' - Terminal station\n  * '17' - RTU\n  * '18' - Wireless access point\n  * '19' - Historian\n  * '20' - Game console\n  * '21' - Fire alarm\n  * '22' - UPS\n  * '23' - Storage appliance\n  * '24' - Virtualization appliance\n  * '25' - Firewall appliance\n  * '26' - Security scanner\n  * '27' - Security controller\n  * '28 ' - Door lock\n  * '29' - Biometric entry system\n  * '30' - HVAC\n  * '31' - Room scheduler\n  * '32' - Load Balancer Appliance\n  * '33' - WAN Concentrator\n  * '34' - IPAM Appliance\n  * '35' - TEMPERATURE SENSOR GATEWAY\n  * '36' - POWER METER\n  * '37' - CONVEYOR SYSTEM\n  * '38' - BUILDING AUTOMATION DEVICE\n  * '39' - VISION CONTROLLER\n  * '40' - MANUFACTURING EXECUTION SYSTEM\n  * '41' - BACNET BROADCAST MANAGEMENT DEVICE BBMD\n  * '42' - BACNET ROUTER AND BBMD\n  * '43' - CLOCK\n  * '44' - RFID\n  * '45' - SCALE\n  * '46' - MOBILE PRINTER\n  * '47' - IED\n  * '48' - CNC MILL\n  * '49' - ROOM MONITOR\n  * '50' - SMART SPEAKER\n  * '51' - VENDING MACHINE\n  * '52' - AUTONOMOUS VEHICLE\n  * '53' - FLEET MANAGEMENT SYSTEM\n  * '54' - BACNET ROUTER\n  * '55' - MOTOR CONTROLLER\n  * '56' - OT GATEWAY\n  * '57' - CONTROLLER\n  * '58' - BUILDING MANAGEMENT SYSTEM\n  * '59' - VOIP PHONE\n  * '60' - VISION SENSOR\n  * '61' - REMOTE IO\n  * '62' - VOIP SERVER\n  * '63' - FLOW METER\n  * '64' - BUILDING AUTOMATION CONTROLLER\n  * '65' - SECURITY CAMERA\n  * '66' - DIGITAL SIGN\n  * '67' - REMOTE ACCESS GATEWAY\n  * '68' - TEMPERATURE SENSOR\n  * '69' - RTLS\n  * '70' - SERIAL TO ETHERNET\n  * '71' - INTERCOM\n  * '72' - ENGINEERING STATION\n  * '73' - DATA LOGGER GATEWAY\n  * '74' - ROBOT\n  * '75' - TABLET\n  * '76' - SCADA SERVER\n  * '77' - INDUSTRIAL PRINTER\n  * '78' - VISION CAMERA\n  * '79' - TIME CLOCK\n  * '80' - VIDEO CONFERENCE\n  * '81' - ELECTRICAL DRIVE\n  * '82' - ACCESS CONTROL\n  * '83' - PRINTER 3D\n  * '84' - ACCESS CONTROL GATEWAY\n  * '85' - ATM\n  * '86' - AUDIO DECODER\n  * '87' - AV SYSTEM\n  * '88' - BACNET ROUTER BBMD\n  * '89' - BADGE READER\n  * '90' - BARCODE SCANNER\n  * '91' - BUILDING AUTOMATION CONTROLLER GATEWAY\n  * '92' - BUILDING MANAGEMENT SENSOR\n  * '93' - BUILDING MANAGEMENT SENSOR GATEWAY\n  * '94' - BUILDING MANAGEMENT SYSTEM GATEWAY\n  * '95' - CAR\n  * '96' - CIRCUIT MONITOR\n  * '97' - CLINICAL MOBILE DEVICE\n  * '98' - CLINICAL MOBILE DEVICE GATEWAY\n  * '99' - CLOCK GATEWAY\n  * '100' - CNC SYSTEM\n  * '101' - CONFERENCE ROOM\n  * '102' - DATA LOGGER\n  * '103' - DIGITAL SIGN WORKSTATION\n  * '104' - DISK PUBLISHER\n  * '105' - DISPATCHER\n  * '106' - EMBEDDED PC\n  * '107' - ENCODER\n  * '108' - EV CHARGING\n  * '109' - FITNESS DEVICE\n  * '110' - GENERIC MOBILE DEVICE\n  * '111' - GPS NAVIGATOR\n  * '112' - INDUSTRIAL BARCODE SCANNER\n  * '113' - INDUSTRIAL METAL DETECTOR\n  * '114' - INDUSTRIAL NETWORK EQUIPMENT\n  * '115' - INDUSTRIAL THIN CLIENT\n  * '116' - INDUSTRIAL THIN CLIENT GATEWAY\n  * '117' - INDUSTRIAL WIRELESS\n  * '118' - INDUSTRIAL WORKSTATION\n  * '119' - INSPECTION SYSTEM\n  * '120' - INTERACTIVE VOICE RESPONSE\n  * '121' - INTERCOM GATEWAY\n  * '122' - IOT CONTROLLER\n  * '123' - LOCK BOX\n  * '124' - MACHINERY HEALTH ANALYZER\n  * '125' - MAILING SYSTEM\n  * '126' - MEDIA GATEWAY\n  * '127' - MEDIA PLAYER\n  * '128' - MEDIA STREAMER\n  * '129' - MICROSCOPE\n  * '130' - MOBILE COMPUTER\n  * '131' - MOTOR STARTER\n  * '132' - MUSICAL INSTRUMENT\n  * '133' - OPC SERVER\n  * '134' - ORDER FULFILLMENT SYSTEM\n  * '135' - OT DEVICE\n  * '136' - OT SERVER\n  * '137' - PA SYSTEM\n  * '138' - PAYMENT KIOSK\n  * '139' - PHYSICAL SECURITY PLATFORM\n  * '140' - POINT OF SALE\n  * '141' - POINT OF SALE GATEWAY\n  * '142' - POWER DISTRIBUTION UNIT\n  * '143' - POWER DISTRIBUTION UNIT GATEWAY\n  * '144' - POWER SUPPLY\n  * '145' - PRINT SERVER\n  * '146' - PROJECTOR\n  * '147' - RADIO\n  * '148' - RADIO REPEATER\n  * '149' - RECORDING SERVER\n  * '150' - REPORTING SERVER\n  * '151' - ROOM AUTOMATION STATION\n  * '152' - ROOM DISPLAY\n  * '153' - RTLS GATEWAY\n  * '154' - SAFETY SYSTEM\n  * '155' - SCADA CLIENT\n  * '156' - SCREEN SHARE\n  * '157' - SECURITY XRAY SCANNER\n  * '158' - SENSOR\n  * '159' - SERIAL TO ETHERNET GATEWAY\n  * '160' - SERVICE TROLLEY\n  * '161' - SMART BOARD\n  * '162' - SMART HOME\n  * '163' - SMART LIGHT\n  * '164' - SMART LIGHT GATEWAY\n  * '165' - SMART LOCK CONTROLLER\n  * '166' - SMARTPHONE\n  * '167' - SMARTWATCH\n  * '168' - SOLAR ENERGY\n  * '169' - TIME CLOCK GATEWAY\n  * '170' - VIDEO CONFERENCE GATEWAY\n  * '171' - VIDEO DECODER\n  * '172' - VIDEO ENCODER\n  * '173' - VIDEO SURVEILLANCE DEVICE\n  * '174' - VOIP ADAPTER\n  * '175' - VOIP PHONE GATEWAY\n  * '176' - WATER SYSTEM\n  * '177' - WIRELESS PHONE\n  * '178' - WIRELESS PHONE GATEWAY\n  * '1001' - OTHER OT\n"
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+      - 45
+      - 46
+      - 47
+      - 48
+      - 49
+      - 50
+      - 51
+      - 52
+      - 53
+      - 54
+      - 55
+      - 56
+      - 57
+      - 58
+      - 59
+      - 60
+      - 61
+      - 62
+      - 63
+      - 64
+      - 65
+      - 66
+      - 67
+      - 68
+      - 69
+      - 70
+      - 71
+      - 72
+      - 73
+      - 74
+      - 75
+      - 76
+      - 77
+      - 78
+      - 79
+      - 80
+      - 81
+      - 82
+      - 83
+      - 84
+      - 85
+      - 86
+      - 87
+      - 88
+      - 89
+      - 90
+      - 91
+      - 92
+      - 93
+      - 94
+      - 95
+      - 96
+      - 97
+      - 98
+      - 99
+      - 100
+      - 101
+      - 102
+      - 103
+      - 104
+      - 105
+      - 106
+      - 107
+      - 108
+      - 109
+      - 110
+      - 111
+      - 112
+      - 113
+      - 114
+      - 115
+      - 116
+      - 117
+      - 118
+      - 119
+      - 120
+      - 121
+      - 122
+      - 123
+      - 124
+      - 125
+      - 126
+      - 127
+      - 128
+      - 129
+      - 130
+      - 131
+      - 132
+      - 133
+      - 134
+      - 135
+      - 136
+      - 137
+      - 138
+      - 139
+      - 140
+      - 141
+      - 142
+      - 143
+      - 144
+      - 145
+      - 146
+      - 147
+      - 148
+      - 149
+      - 150
+      - 151
+      - 152
+      - 153
+      - 154
+      - 155
+      - 156
+      - 157
+      - 158
+      - 159
+      - 160
+      - 161
+      - 162
+      - 163
+      - 164
+      - 165
+      - 166
+      - 167
+      - 168
+      - 169
+      - 170
+      - 171
+      - 172
+      - 173
+      - 174
+      - 175
+      - 176
+      - 177
+      - 178
+      - 1001
+    assetBasicInfo:
+      allOf:
+      - $ref: '#/components/schemas/idNamePair'
+      - type: object
+        properties:
+          assetStatus:
+            $ref: '#/components/schemas/assetStatus'
+          assetType:
+            $ref: '#/components/schemas/assetType'
+          breakGlassActivated:
+            type: boolean
+          domain:
+            type: string
+          id:
+            type: string
+          identityProtectionState:
+            $ref: '#/components/schemas/protectionState'
+          isQuarantined:
+            type: boolean
+          name:
+            type: string
+          otLocattion:
+            $ref: '#/components/schemas/otLocation'
+          protectionState:
+            $ref: '#/components/schemas/protectionState'
+          rpcProtectionState:
+            $ref: '#/components/schemas/protectionState'
+    protocol:
+      description: '* ''0'' - HOPOPT
+
+        * ''1'' - ICMP
+
+        * ''2'' - IGMP
+
+        * ''3'' - GGP
+
+        * ''4'' - IPv4
+
+        * ''5'' - ST
+
+        * ''6'' - TCP
+
+        * ''7'' - CBT
+
+        * ''8'' - EGP
+
+        * ''9'' - IGP
+
+        * ''10'' - BBN-RCC-MON
+
+        * ''11'' - NVP-II
+
+        * ''12'' - PUP
+
+        * ''13'' - ARGUS
+
+        * ''14'' - EMCON
+
+        * ''15'' - XNET
+
+        * ''16'' - CHAOS
+
+        * ''17'' - UDP
+
+        * ''18'' - MUX
+
+        * ''19'' - DCN-MEAS
+
+        * ''20'' - HMP
+
+        * ''21'' - PRM
+
+        * ''22'' - XNS-IDP
+
+        * ''23'' - TRUNK-1
+
+        * ''24'' - TRUNK-2
+
+        * ''25'' - LEAF-1
+
+        * ''26'' - LEAF-2
+
+        * ''27'' - RDP
+
+        * ''28'' - IRTP
+
+        * ''29'' - ISO-TP4
+
+        * ''30'' - NETBLT
+
+        * ''31'' - MFE-NSP
+
+        * ''32'' - MERIT-INP
+
+        * ''33'' - DCCP
+
+        * ''34'' - 3PC
+
+        * ''35'' - IDPR
+
+        * ''36'' - XTP
+
+        * ''37'' - DDP
+
+        * ''38'' - IDPR-CMTP
+
+        * ''39'' - TP++
+
+        * ''40'' - IL
+
+        * ''41'' - Embedded
+
+        * ''42'' - SDRP
+
+        * ''43'' - IPv6RoutingHeader
+
+        * ''44'' - IPv6FragmentHeader
+
+        * ''45'' - IDRP
+
+        * ''46'' - RSVP
+
+        * ''47'' - GRE
+
+        * ''48'' - DSR
+
+        * ''49'' - BNA
+
+        * ''50'' - ESP
+
+        * ''51'' - AH
+
+        * ''52'' - I-NLSP
+
+        * ''53'' - SwIPe
+
+        * ''54'' - NARP
+
+        * ''55'' - MOBILE
+
+        * ''56'' - TLSP
+
+        * ''57'' - SKIP
+
+        * ''58'' - ICMPv6
+
+        * ''59'' - IPv6NonExtHeader
+
+        * ''60'' - IPv6DestinationOptions
+
+        * ''61'' - Host-interanl
+
+        * ''62'' - CFTP
+
+        * ''63'' - local-network
+
+        * ''64'' - SAT-EXPAK
+
+        * ''65'' - KRYPTOLAN
+
+        * ''66'' - RVD
+
+        * ''67'' - IPPC
+
+        * ''68'' - distributed-file-system
+
+        * ''69'' - SAT-MON
+
+        * ''70'' - VISA
+
+        * ''71'' - IPCU
+
+        * ''72'' - CPNX
+
+        * ''73'' - CPHB
+
+        * ''74'' - WSN
+
+        * ''75'' - PVP
+
+        * ''76'' - BR-SAT-MON
+
+        * ''77'' - ND
+
+        * ''78'' - WB-MON
+
+        * ''79'' - WB-EXPAK
+
+        * ''80'' - ISO-IP
+
+        * ''81'' - VMTP
+
+        * ''82'' - SECURE-VMTP
+
+        * ''83'' - VINES
+
+        * ''84'' - IPTM
+
+        * ''85'' - NSFNET-IGP
+
+        * ''86'' - DGP
+
+        * ''87'' - TCF
+
+        * ''88'' - EIGRP
+
+        * ''89'' - OSPF
+
+        * ''90'' - Sprite-RPC
+
+        * ''91'' - LARP
+
+        * ''92'' - MTP
+
+        * ''93'' - AX.25
+
+        * ''94'' - OS
+
+        * ''95'' - MICP
+
+        * ''96'' - SCC-SP
+
+        * ''97'' - ETHERIP
+
+        * ''98'' - ENCAP
+
+        * ''99'' - private-encryption
+
+        * ''100'' - GMTP
+
+        * ''101'' - IFMP
+
+        * ''102'' - PNNI
+
+        * ''103'' - PIM
+
+        * ''104'' - ARIS
+
+        * ''105'' - SCPS
+
+        * ''106'' - QNX
+
+        * ''107'' - A/N
+
+        * ''108'' - IPComp
+
+        * ''109'' - SNP
+
+        * ''110'' - Compaq-Peer
+
+        * ''111'' - IPX-in-IP
+
+        * ''112'' - VRRP
+
+        * ''113'' - PGM
+
+        * ''114'' - 0-hop
+
+        * ''115'' - L2TP
+
+        * ''116'' - DDX
+
+        * ''117'' - IATP
+
+        * ''118'' - STP
+
+        * ''119'' - SRP
+
+        * ''120'' - UTI
+
+        * ''121'' - SMP
+
+        * ''122'' - SM
+
+        * ''123'' - PTP
+
+        * ''124'' - IS-IS-over-IPv4
+
+        * ''125'' - FIRE
+
+        * ''126'' - CRTP
+
+        * ''127'' - CRUDP
+
+        * ''128'' - SSCOPMCE
+
+        * ''129'' - IPLT
+
+        * ''130'' - SPS
+
+        * ''131'' - PIPE
+
+        * ''132'' - SCTP
+
+        * ''133'' - FC
+
+        * ''134'' - RSVP-E2E-IGNORE
+
+        * ''135'' - Mobility-Header
+
+        * ''136'' - UDPLite
+
+        * ''137'' - MPLS-in-IP
+
+        * ''138'' - manet
+
+        * ''139'' - HIP
+
+        * ''140'' - Shim6
+
+        * ''141'' - WESP
+
+        * ''142'' - ROHC
+
+        * ''143'' - Ethernet
+
+        * ''144'' - 144 (custom)
+
+        * ''145'' - 145 (custom)
+
+        * ''146'' - 146 (custom)
+
+        * ''147'' - 147 (custom)
+
+        * ''148'' - 148 (custom)
+
+        * ''149'' - 149 (custom)
+
+        * ''150'' - 150 (custom)
+
+        * ''151'' - 151 (custom)
+
+        * ''152'' - 152 (custom)
+
+        * ''153'' - 153 (custom)
+
+        * ''154'' - 154 (custom)
+
+        * ''155'' - 155 (custom)
+
+        * ''156'' - 156 (custom)
+
+        * ''157'' - 157 (custom)
+
+        * ''158'' - 158 (custom)
+
+        * ''159'' - 159 (custom)
+
+        * ''160'' - 160 (custom)
+
+        * ''161'' - 161 (custom)
+
+        * ''162'' - 162 (custom)
+
+        * ''163'' - 163 (custom)
+
+        * ''164'' - 164 (custom)
+
+        * ''165'' - 165 (custom)
+
+        * ''166'' - 166 (custom)
+
+        * ''167'' - 167 (custom)
+
+        * ''168'' - 168 (custom)
+
+        * ''169'' - 169 (custom)
+
+        * ''170'' - 170 (custom)
+
+        * ''171'' - 171 (custom)
+
+        * ''172'' - 172 (custom)
+
+        * ''173'' - 173 (custom)
+
+        * ''174'' - 174 (custom)
+
+        * ''175'' - 175 (custom)
+
+        * ''176'' - 176 (custom)
+
+        * ''177'' - 177 (custom)
+
+        * ''178'' - 178 (custom)
+
+        * ''179'' - 179 (custom)
+
+        * ''180'' - 180 (custom)
+
+        * ''181'' - 181 (custom)
+
+        * ''182'' - 182 (custom)
+
+        * ''183'' - 183 (custom)
+
+        * ''184'' - 184 (custom)
+
+        * ''185'' - 185 (custom)
+
+        * ''186'' - 186 (custom)
+
+        * ''187'' - 187 (custom)
+
+        * ''188'' - 188 (custom)
+
+        * ''189'' - 189 (custom)
+
+        * ''190'' - 190 (custom)
+
+        * ''191'' - 191 (custom)
+
+        * ''192'' - 192 (custom)
+
+        * ''193'' - 193 (custom)
+
+        * ''194'' - 194 (custom)
+
+        * ''195'' - 195 (custom)
+
+        * ''196'' - 196 (custom)
+
+        * ''197'' - 197 (custom)
+
+        * ''198'' - 198 (custom)
+
+        * ''199'' - 199 (custom)
+
+        * ''200'' - 200 (custom)
+
+        * ''201'' - 201 (custom)
+
+        * ''202'' - 202 (custom)
+
+        * ''203'' - 203 (custom)
+
+        * ''204'' - 204 (custom)
+
+        * ''205'' - 205 (custom)
+
+        * ''206'' - 206 (custom)
+
+        * ''207'' - 207 (custom)
+
+        * ''208'' - 208 (custom)
+
+        * ''209'' - 209 (custom)
+
+        * ''210'' - 210 (custom)
+
+        * ''211'' - 211 (custom)
+
+        * ''212'' - 212 (custom)
+
+        * ''213'' - 213 (custom)
+
+        * ''214'' - 214 (custom)
+
+        * ''215'' - 215 (custom)
+
+        * ''216'' - 216 (custom)
+
+        * ''217'' - 217 (custom)
+
+        * ''218'' - 218 (custom)
+
+        * ''219'' - 219 (custom)
+
+        * ''220'' - 220 (custom)
+
+        * ''221'' - 221 (custom)
+
+        * ''222'' - 222 (custom)
+
+        * ''223'' - 223 (custom)
+
+        * ''224'' - 224 (custom)
+
+        * ''225'' - 225 (custom)
+
+        * ''226'' - 226 (custom)
+
+        * ''227'' - 227 (custom)
+
+        * ''228'' - 228 (custom)
+
+        * ''229'' - 229 (custom)
+
+        * ''230'' - 230 (custom)
+
+        * ''231'' - 231 (custom)
+
+        * ''232'' - 232 (custom)
+
+        * ''233'' - 233 (custom)
+
+        * ''234'' - 234 (custom)
+
+        * ''235'' - 235 (custom)
+
+        * ''236'' - 236 (custom)
+
+        * ''237'' - 237 (custom)
+
+        * ''238'' - 238 (custom)
+
+        * ''239'' - 239 (custom)
+
+        * ''240'' - 240 (custom)
+
+        * ''241'' - 241 (custom)
+
+        * ''242'' - 242 (custom)
+
+        * ''243'' - 243 (custom)
+
+        * ''244'' - 244 (custom)
+
+        * ''245'' - 245 (custom)
+
+        * ''246'' - 246 (custom)
+
+        * ''247'' - 247 (custom)
+
+        * ''248'' - 248 (custom)
+
+        * ''249'' - 249 (custom)
+
+        * ''250'' - 250 (custom)
+
+        * ''251'' - 251 (custom)
+
+        * ''252'' - 252 (custom)
+
+        * ''253'' - 253 (custom)
+
+        * ''254'' - 254 (custom)
+
+        * ''255'' - Raw
+
+        * ''256'' - Any
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+      - 45
+      - 46
+      - 47
+      - 48
+      - 49
+      - 50
+      - 51
+      - 52
+      - 53
+      - 54
+      - 55
+      - 56
+      - 57
+      - 58
+      - 59
+      - 60
+      - 61
+      - 62
+      - 63
+      - 64
+      - 65
+      - 66
+      - 67
+      - 68
+      - 69
+      - 70
+      - 71
+      - 72
+      - 73
+      - 74
+      - 75
+      - 76
+      - 77
+      - 78
+      - 79
+      - 80
+      - 81
+      - 82
+      - 83
+      - 84
+      - 85
+      - 86
+      - 87
+      - 88
+      - 89
+      - 90
+      - 91
+      - 92
+      - 93
+      - 94
+      - 95
+      - 96
+      - 97
+      - 98
+      - 99
+      - 100
+      - 101
+      - 102
+      - 103
+      - 104
+      - 105
+      - 106
+      - 107
+      - 108
+      - 109
+      - 110
+      - 111
+      - 112
+      - 113
+      - 114
+      - 115
+      - 116
+      - 117
+      - 118
+      - 119
+      - 120
+      - 121
+      - 122
+      - 123
+      - 124
+      - 125
+      - 126
+      - 127
+      - 128
+      - 129
+      - 130
+      - 131
+      - 132
+      - 133
+      - 134
+      - 135
+      - 136
+      - 137
+      - 138
+      - 139
+      - 140
+      - 141
+      - 142
+      - 143
+      - 144
+      - 145
+      - 146
+      - 147
+      - 148
+      - 149
+      - 150
+      - 151
+      - 152
+      - 153
+      - 154
+      - 155
+      - 156
+      - 157
+      - 158
+      - 159
+      - 160
+      - 161
+      - 162
+      - 163
+      - 164
+      - 165
+      - 166
+      - 167
+      - 168
+      - 169
+      - 170
+      - 171
+      - 172
+      - 173
+      - 174
+      - 175
+      - 176
+      - 177
+      - 178
+      - 179
+      - 180
+      - 181
+      - 182
+      - 183
+      - 184
+      - 185
+      - 186
+      - 187
+      - 188
+      - 189
+      - 190
+      - 191
+      - 192
+      - 193
+      - 194
+      - 195
+      - 196
+      - 197
+      - 198
+      - 199
+      - 200
+      - 201
+      - 202
+      - 203
+      - 204
+      - 205
+      - 206
+      - 207
+      - 208
+      - 209
+      - 210
+      - 211
+      - 212
+      - 213
+      - 214
+      - 215
+      - 216
+      - 217
+      - 218
+      - 219
+      - 220
+      - 221
+      - 222
+      - 223
+      - 224
+      - 225
+      - 226
+      - 227
+      - 228
+      - 229
+      - 230
+      - 231
+      - 232
+      - 233
+      - 234
+      - 235
+      - 236
+      - 237
+      - 238
+      - 239
+      - 240
+      - 241
+      - 242
+      - 243
+      - 244
+      - 245
+      - 246
+      - 247
+      - 248
+      - 249
+      - 250
+      - 251
+      - 252
+      - 253
+      - 254
+      - 255
+      - 256
+    protectionState:
+      description: '* ''0'' - Unspecified
+
+        * ''1'' - Unsegmented
+
+        * ''2'' - Unsegmenting
+
+        * ''3'' - Segmented
+
+        * ''4'' - Segmenting
+
+        * ''5'' - Learning until
+
+        * ''6'' - forced_unprotected
+
+        * ''7'' - Unsegmenting'' - Due to Policy
+
+        * ''8'' - Segmented'' - Due to Policy
+
+        * ''9'' - Segmenting- Due to Policy
+
+        * ''10'' - Learning until'' - Due to Policy
+
+        * ''11'' - Learning done
+
+        * ''12'' - Learning done- Due to Policy
+
+        * ''13'' - APPLYING_QUEUE_WITH_BLOCKS
+
+        * ''14'' - APPLYING_QUEUE_WITH_BLOCKS_DUE_TO_POLICY
+
+        * ''15'' - QUEUED_WITH_BLOCKS
+
+        * ''16'' - QUEUED_WITH_BLOCKS_DUE_TO_POLICY
+
+        * ''17'' - QUEUED_WITH_BLOCKS_DONE
+
+        * ''18'' - QUEUED_WITH_BLOCKS_DUE_TO_POLICY_DONE
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+    ruleState:
+      description: '* ''1'' - Enabled
+
+        * ''2'' - Disabled
+
+        * ''3'' - Deleted By User
+
+        * ''4'' - Pending Review
+
+        * ''5'' - Pending Review Auto
+
+        * ''6'' - Rejected by User
+
+        * ''7'' - Excluded by User
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+    purdueLevel:
+      description: "Purdue Level:\n  * '0' - Unspecified\n  * '1' - Level 0\n  * '2' - Level 1\n  * '3' - Level 2\n  * '4' - Level 3\n  * '5' - Level 4\n"
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    asset:
+      allOf:
+      - $ref: '#/components/schemas/assetBasicInfo'
+      - type: object
+        properties:
+          assetStatus:
+            $ref: '#/components/schemas/assetStatus'
+          assignedDeploymentId:
+            type: string
+          assignedDeployment:
+            $ref: '#/components/schemas/idNamePair'
+          cloudConnectorVersion:
+            type: string
+          deploymentaClusterId:
+            type: string
+          deploymentsClusterSource:
+            $ref: '#/components/schemas/deploymentsClusterSource'
+          deploymentsCluster:
+            $ref: '#/components/schemas/idNamePair'
+          enforcementMethod:
+            $ref: '#/components/schemas/enforcementMethod'
+          environmentGroup:
+            $ref: '#/components/schemas/idNamePair'
+          externalDeviceId:
+            type: string
+          fqdn:
+            type: string
+            example: laptoppc.domain.local
+          hasDns:
+            type: boolean
+          healthState:
+            $ref: '#/components/schemas/healthState'
+          identityProtectAt:
+            $ref: '#/components/schemas/epochMillis'
+          identityProtectedAt:
+            $ref: '#/components/schemas/epochMillis'
+          inactiveReason:
+            $ref: '#/components/schemas/inactiveReason'
+          inactiveSince:
+            $ref: '#/components/schemas/epochMillis'
+          ipV4Addresses:
+            type: array
+            items:
+              type: string
+              example: 1.1.1.1
+          ipV6Addresses:
+            type: array
+            items:
+              type: string
+          ipSpace:
+            type: integer
+          isIpSecConfigured:
+            type: boolean
+          lastLogon:
+            $ref: '#/components/schemas/epochMillis'
+          manufacturer:
+            type: string
+          operatingSystem:
+            type: string
+            example: Windows 10 Pro
+          osType:
+            $ref: '#/components/schemas/osType'
+          outboundRestriction:
+            $ref: '#/components/schemas/outboundRestrictionMode'
+          passwordUpdateTime:
+            $ref: '#/components/schemas/epochMillis'
+          preferredDeploymentId:
+            type: string
+          preferredDeployment:
+            $ref: '#/components/schemas/idNamePair'
+          principalName:
+            type: string
+          protectAt:
+            $ref: '#/components/schemas/epochMillis'
+          protectedAt:
+            $ref: '#/components/schemas/epochMillis'
+          purdueLevel:
+            $ref: '#/components/schemas/purdueLevel'
+          rpcMonitored:
+            type: boolean
+          rpcProtectAt:
+            $ref: '#/components/schemas/epochMillis'
+          rpcProtectedAt:
+            $ref: '#/components/schemas/epochMillis'
+          source:
+            $ref: '#/components/schemas/source'
+          state:
+            $ref: '#/components/schemas/state'
+          switchLocationOverridden:
+            type: boolean
+    healthState:
+      type: object
+      properties:
+        healthStatus:
+          description: '* ''0'' - Unspecified
+
+            * ''1'' - Healthy
+
+            * ''2'' - Error
+
+            * ''3'' - Warning
+
+            * ''4'' - N/A
+
+            * ''5'' - Retrying
+
+            * ''6'' - Blocker
+
+            '
+          type: integer
+          format: int32
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+        healthIssuesList:
+          type: array
+          items:
+            $ref: '#/components/schemas/healthIssue'
+    ruleReviewMode:
+      description: '* 1 - Apply Immediately
+
+        * 2 - Review
+
+        * 3 - Conditional Review
+
+        '
+      enum:
+      - 1
+      - 2
+      - 3
+      format: int32
+      type: integer
+    deploymentsClusterSource:
+      description: '* ''1'' - System
+
+        * ''2'' - User
+
+        * ''3'' - Domain
+
+        * ''4'' - Subnet
+
+        * ''5'' - None
+
+        * ''6'' - N/A
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+    ruleAction:
+      description: '* 1 - Allow
+
+        * 2 - Block
+
+        * 3 - Force Block
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+    assetStatus:
+      description: "Possible asset status:\n  * '1' - Not monitored\n  * '2' - Segment server\n  * '4' - Can't be monitored (unsupported OS)\n  * '5' - Can't be monitored (unmonitorable)\n  * '6' - Can't be monitored (unmonitorable)\n  * '7' - Cloud connector\n  * '8' - Not monitored (ansible unreachable)\n  * '9' - Not monitored (cloud connector uninstalled)\n  * '10' - Not monitored (cloud connector required)\n  * '12' - Can't be monitored (inactive entity)\n  * '13' - Stalked Externally\n  * '14' - Lightweight Agent\n"
+      type: integer
+      enum:
+      - 1
+      - 2
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 12
+      - 13
+      - 14
+    srcUsersList:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          sid:
+            type: string
+    rule:
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/ruleAction'
+        activitiesCount:
+          type: integer
+          format: int32
+        aeOverridden:
+          type: boolean
+        approvedAt:
+          $ref: '#/components/schemas/epochMillis'
+        approvedBy:
+          $ref: '#/components/schemas/idNamePair'
+        changeTicket:
+          type: string
+        context:
+          $ref: '#/components/schemas/ruleContext'
+        createdAt:
+          $ref: '#/components/schemas/epochMillis'
+        createdBy:
+          $ref: '#/components/schemas/createdBy'
+        deletedAt:
+          $ref: '#/components/schemas/epochMillis'
+        deletedBy:
+          $ref: '#/components/schemas/idNamePair'
+        deleteSuggestionRejected:
+          type: boolean
+        description:
+          type: string
+        direction:
+          $ref: '#/components/schemas/ruleDirection'
+        enforcementSource:
+          $ref: '#/components/schemas/enforcementSource'
+        excludedEntityInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/idNamePair'
+        excludedEntitySuccessor:
+          $ref: '#/components/schemas/idNamePair'
+        excludedLocalIdsList:
+          type: array
+          items:
+            type: string
+        expiresAt:
+          $ref: '#/components/schemas/epochMillis'
+        id:
+          type: string
+          format: uuid
+        ipSecOpt:
+          $ref: '#/components/schemas/ipSecOpt'
+        isRejectOnLinux:
+          type: boolean
+        localEntityId:
+          type: string
+        localEntityInfos:
+          type: array
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/asset'
+            - $ref: '#/components/schemas/idNamePair'
+        localEntitySuccessor:
+          $ref: '#/components/schemas/idNamePair'
+        localProcessesList:
+          type: array
+          items:
+            type: string
+        multipleLocalEntityIdsList:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        parentId:
+          type: string
+        parentSwitchRuleId:
+          type: string
+        parentSwitchRuleType:
+          type: integer
+          format: int32
+        parentType:
+          type: integer
+          format: int32
+        portsList:
+          $ref: '#/components/schemas/portsList'
+        remoteEntityIdsList:
+          type: array
+          items:
+            type: string
+        remoteEntityInfos:
+          type: array
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/asset'
+            - $ref: '#/components/schemas/idNamePair'
+        remoteEntitySuccessor:
+          $ref: '#/components/schemas/idNamePair'
+        reviewMode:
+          $ref: '#/components/schemas/ruleReviewMode'
+        ruleClass:
+          $ref: '#/components/schemas/ruleClass'
+        ruleReview:
+          $ref: '#/components/schemas/ruleReviewReason'
+        servicesList:
+          type: array
+          items:
+            type: string
+        skipAudit:
+          type: boolean
+        srcUsersInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/idNamePair'
+        srcUsersList:
+          $ref: '#/components/schemas/srcUsersList'
+        state:
+          $ref: '#/components/schemas/ruleState'
+        suggestionReason:
+          type: string
+        suggestionType:
+          $ref: '#/components/schemas/ruleSuggestionType'
+        updatedAt:
+          $ref: '#/components/schemas/epochMillis'
+        updatedBy:
+          $ref: '#/components/schemas/idNamePair'
+      x-speakeasy-entity:
+      - InboundRule
+      - OutboundRule
+      example:
+        id: 6a4a42aa-c207-4860-8b32-a8e186f8af80
+        localEntityId: g:t:01085899
+        action: 1
+        createdBy:
+          createdBy:
+            id: u:a:2IzNIRlf
+            name: nicholas
+          userRole: 1
+          enforcementSource: 4
+        description: DCs
+        direction: 1
+        parentId: ''
+        parentType: 0
+        portsList:
+        - ports: 53,88,135,389,445,464,636,3268-3269,49152-65535
+          protocolType: 6
+        - ports: 53,67,88,123,138,389,464
+          protocolType: 17
+        remoteEntityIdsList:
+        - b:110001
+        state: 1
+        createdAt: 1661349648315
+        updatedAt: 1684409059065
+        localProcessesList:
+        - '*'
+        servicesList: []
+        excludedLocalIdsList: []
+        updatedBy:
+          id: ''
+          name: ''
+        approvedBy:
+          id: ''
+          name: ''
+        ruleClass: 3
+        ipSecOpt: 1
+        srcUsersList: []
+        multipleLocalEntityIdsList: []
+        parentSwitchRuleId: ''
+        parentSwitchRuleType: 0
+        name: ''
+        changeTicket: ''
+        context: 0
+        aeOverridden: false
+        localEntityInfos:
+        - id: g:t:01085899
+          name: Domain controllers
+          domain: tag
+          hasNetworkProtectionPolicy: false
+          hasIdentityProtectionPolicy: false
+          guid: 978f7753-650a-4ef1-aeeb-d2ceee64855b
+          sid: ''
+        remoteEntityInfos:
+        - id: b:110001
+          name: Any asset
+        excludedEntityInfos: []
+        activitiesCount: 498871
+        srcUserInfos: []
+    createdBy:
+      type: object
+      properties:
+        createdBy:
+          $ref: '#/components/schemas/idNamePair'
+        email:
+          type: string
+        enforcementSource:
+          $ref: '#/components/schemas/enforcementSource'
+        userRole:
+          $ref: '#/components/schemas/userRole'
+    enforcementSource:
+      description: '* ''1'' - ReactivePolicy
+
+        * ''2'' - Automated
+
+        * ''3'' - AccessPortal
+
+        * ''4'' - AdminPortal
+
+        * ''5'' - AI
+
+        * ''6'' - API
+
+        * ''7'' - Setup
+
+        * ''8'' - Connect
+
+        * ''9'' - System
+
+        * ''10'' - DownloadPortal
+
+        * ''11'' - ExternalAccessPortal
+
+        * ''12'' - DayTwo
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+    ruleDirection:
+      description: '* ''1'' - Inbound
+
+        * ''2'' - Outbound
+
+        * ''3'' - Both
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+    healthIssue:
+      type: object
+      properties:
+        issueCode:
+          description: '* ''0'' - Unspecified
+
+            * ''1'' - Unknown
+
+            * ''2'' - Access Denied
+
+            * ''3'' - IO Device Issue
+
+            * ''4'' - DotNet 3.5
+
+            * ''5'' - WMI Corrupted
+
+            * ''6'' - URL Filtering
+
+            * ''7'' - Out of Space
+
+            * ''8'' - Unsupported HMAC
+
+            * ''9'' - Unsupported Encryption
+
+            * ''10'' - Setup Script Failed
+
+            * ''11'' - Slow MFA
+
+            * ''12'' - Unexpted GPO Rules
+
+            * ''13'' - Zero Networks GPO Rule Mismatch
+
+            * ''14'' - Audit Mismatch
+
+            * ''15'' - Asset ID Mismatch
+
+            * ''16'' - Unsupported HTTP Version
+
+            * ''17'' - Registry Marked for Deletion
+
+            * ''18'' - Unable to add to automation group
+
+            * ''19'' - Incorrect Username or Password
+
+            * ''20'' - RPC Open Source Installed
+
+            * ''21'' - Timeout during initialization
+
+            * ''22'' - Data collection timeout
+
+            * ''23'' - Not in Sudoers
+
+            * ''24'' - Invalid SSH Key
+
+            * ''25'' - Events Unavailable
+
+            * ''26'' - SSH Password Incorrect
+
+            * ''27'' - SSH Password Expired
+
+            * ''28'' - Segmneted Users not found
+
+            * ''29'' - Unsupported Python Versions
+
+            * ''30'' - Cound not query segmented users
+
+            * ''31'' - Switch unreachable
+
+            * ''32'' - Switch communication issue
+
+            * ''33'' - Interface protection resource exceeded
+
+            * ''34'' - Unsupported Package Manager
+
+            * ''35'' - Firewall disabled by GPO
+
+            * ''36'' - Linux firewall logs oversized
+
+            * ''1000'' - First blocker issue code
+
+            * ''1001'' - Cluster node ipv6 disabled
+
+            * ''1002'' - Local rules merge disallowed
+
+            '
+          type: integer
+          format: int32
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          - 8
+          - 9
+          - 10
+          - 11
+          - 12
+          - 13
+          - 14
+          - 15
+          - 16
+          - 17
+          - 18
+          - 19
+          - 20
+          - 21
+          - 22
+          - 23
+          - 24
+          - 25
+          - 26
+          - 27
+          - 28
+          - 29
+          - 30
+          - 31
+          - 32
+          - 33
+          - 34
+          - 35
+          - 36
+          - 1000
+          - 1001
+          - 1002
+        details:
+          type: string
+    ruleBody:
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/ruleAction'
+        reviewMode:
+          $ref: '#/components/schemas/ruleReviewMode'
+        changeTicket:
+          type: string
+        description:
+          type: string
+        excludedLocalIdsList:
+          type: array
+          items:
+            type: string
+        expiresAt:
+          $ref: '#/components/schemas/epochMillis'
+          x-speakeasy-param-optional: true
+        ipSecOpt:
+          $ref: '#/components/schemas/ipSecOpt'
+        name:
+          type: string
+        localEntityId:
+          type: string
+        localProcessesList:
+          type: array
+          items:
+            type: string
+        servicesList:
+          type: array
+          items:
+            type: string
+        portsList:
+          $ref: '#/components/schemas/portsList'
+        remoteEntityIdsList:
+          type: array
+          items:
+            type: string
+        srcUsersList:
+          $ref: '#/components/schemas/srcUsersList'
+        state:
+          $ref: '#/components/schemas/ruleState'
+        context:
+          type: integer
+          format: int32
+      required:
+      - action
+      - localEntityId
+      - localProcessesList
+      - portsList
+      - remoteEntityIdsList
+      - state
+      x-speakeasy-entity:
+      - InboundRule
+      - OutboundRule
+      example:
+        remoteEntityIdsList:
+        - g:s:14085899
+        localEntityId: a:a:rHXNGBbN
+        excludedLocalIdsList: []
+        portsList:
+        - ports: '67'
+          protocolType: 6
+        ipSecOpt: 1
+        description: ''
+        state: 1
+        action: 1
+        localProcessesList:
+        - '*'
+        servicesList: []
+        srcUsersList: []
+        name: ''
+        changeTicket: ''
+    portsList:
+      type: array
+      items:
+        type: object
+        properties:
+          ports:
+            type: string
+          protocolType:
+            $ref: '#/components/schemas/protocol'
+    epochMillis:
+      description: Epoch Millis
+      type: integer
+      format: int64
+      title: epochMillis
+    outboundRestrictionMode:
+      description: '* ''1'' - No restrictions
+
+        * ''2'' - Internal Restricted
+
+        * ''3'' - External Restricted
+
+        * ''4'' - Internal and External Restricted
+
+        * ''5'' - No applicable
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    enforcementMethod:
+      description: "Possible values:\n  * '1' - Linux IP Tables\n  * '2' - Linux NF Tables\n  * '3' - Windows Firewall\n  * '4' - Windows WFP\n"
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+    userRole:
+      description: "* '0' - Unspecified\n* '1' - Admin\n* '2' - Viewer\n* '3' - Regular\n* '4' - API-FullAccess\n* '5' - API-ReadOnly\n* '6' - SelfService\n* '7' - CloudConnectorProvisioning\n* '8' - JAMF Asset\n* '9' - Asset Manager\n* '10' - Operator\n* '11' - Service Now Token\n* '12' - Segment Server Provisioning\n* '13' - Connect Server Provisioning\n* '14' - Segment Connector Provisioning \n"
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+    ruleClass:
+      description: '* ''1'' - Trivial
+
+        * ''2'' - Permissive
+
+        * ''3'' - Privileged
+
+        * ''4'' - Critical
+
+        * ''5'' - System
+
+        * ''6'' - Preventative
+
+        * ''8'' - Dangerous
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 8
+    ruleItem:
+      type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/rule'
+    ruleContext:
+      description: '- ''0'' - Unspecified
+
+        - ''1'' - Block
+
+        - ''2'' - App Ring
+
+        - ''3'' - Global RPC
+
+        - ''4'' - Populare App
+
+        - ''5'' - MS Cluster
+
+        - ''6'' - Tag
+
+        - ''7'' - Scanner
+
+        - ''8'' - Popular Destination
+
+        - ''9'' - Popular Source
+
+        - ''10'' - MFA with Rule
+
+        - ''11'' - Inter Server
+
+        - ''12'' - AE Group
+
+        - ''13'' - Block High Risk IPs
+
+        - ''14'' - Unmonitored Source
+
+        - ''15'' - Popular Client
+
+        - ''16'' - Externally Facing Popular Destination
+
+        - ''17'' - External IP Source
+
+        - ''18'' - DC Tag
+
+        - ''19'' - MDI Tag
+
+        - ''20'' - DHCP Tag
+
+        - ''21'' - DHCP Failover Tag
+
+        - ''22'' - SCCM Tag
+
+        - ''23'' - DNS Tag
+
+        - ''24'' - Web Server Tag
+
+        - ''25'' - Exchange Tag
+
+        - ''26'' - Exchange Internal Tag
+
+        - ''27'' - DFSR Tag
+
+        - ''28'' - FTP Tag
+
+        - ''29'' - ADFS Tag
+
+        - ''30'' - WSUS Tag
+
+        - ''31'' - PDQ Incoming
+
+        - ''32'' - PDQ Outgoing
+
+        - ''33'' - Citrix ICA
+
+        - ''34'' - Citrix Broker Incoming
+
+        - ''35'' - Citrix Broker Outgoing
+
+        - ''36'' - WDS Tag
+
+        - ''37'' - MS CA Tag
+
+        - ''38'' - Direct Access Tag
+
+        - ''39'' - KMS Tag
+
+        - ''40'' - Security Scanners
+
+        - ''41'' - Backup Tag
+
+        - ''42'' - Databases Tag
+
+        - ''43'' - Port Scanners
+
+        - ''44'' - MS Cluster to external assets
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+    idNamePair:
+      type: object
+      properties:
+        id:
+          description: EntityId
+          type: string
+        name:
+          description: Entity Name
+          type: string
+    ipSecOpt:
+      description: '* For allow rule only.
+
+        * ''1'' - Off
+
+        * ''2'' - Null encapsulation connections
+
+        * ''3'' - Authenticated and integrity-protected connections
+
+        * ''4'' - Encrypted connections and dynamically negotiate encryption (inbound rule only)
+
+        * ''5'' - Encrypted connections
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    source:
+      description: "Possible asset sources:\n  * '0' - Unspecified\n  * '1' - Access portal\n  * '2' - SSP\n  * '3' - Active directory\n  * '4' - Custom\n  * '5' - System\n  * '6' - Ansible\n  * '7' - Manual OT/IoT\n  * '8' - Workgroup\n  * '9' - Azure active directory\n  * '10' - Azure\n  * '11' - AWS\n  * '12' - GCP\n  * '13' - Tag\n  * '14' - Jamf\n  * '15' - Manual Linux\n  * '16' - IBM cloud\n  * '17' - Oracle cloud\n  * '18' - VMware cloud\n  * '19' - Alibaba cloud\n  * '20' - Lumen cloud\n  * '21' - OVH cloud\n  * '22' - Connect\n  * '23' - AI\n  * '24' - SNOW\n  * '25' - Google Workspace\n  * '26' - OU\n  * '27' - Environment\n  * '28' - Conditional\n  * '29' - Claroty OT\n  * '30' - Manual Mac\n"
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+    ruleReviewReason:
+      description: "Mandatory object for rule review approve_with_changes / reject.\n\nreason: {\n    HUMAN_TRAFFIC_COVERED_BY_MFA = 1,\n    TIGHTEN_RULE_SCOPE = 2,\n    MISSING_PORT_OR_PROCESS = 3,\n    AFFECTED_ENTITIES_CONTAINED_IN_AN_EXISTING_GROUP = 4,\n    REDUNDANT_RULE = 5,\n    TRAFFIC_SHOULD_BE_BLOCKED = 6,\n    OTHER = 7\n}"
+      type: object
+      properties:
+        reason:
+          type: integer
+        details:
+          description: Optional if reason != OTHER(7), mandatory if reason == OTHER(7)
+          type: string
+      required:
+      - reason
+      x-examples:
+        example-1:
+          review:
+            reason: 7
+            details: reason == 7 means OTHER, so details field is mandatory
+        example-2:
+          review:
+            reason: 2
+    inactiveReason:
+      description: '* ''1'' - Duplicated in asset repository
+
+        * ''2'' - Manually set as inactive
+
+        * ''3'' - None
+
+        * ''4'' - Disabled in asset repository
+
+        * ''5'' - Inactive in asset repository
+
+        * ''6'' - Deleted in asset repository
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+    osType:
+      description: "Possible osType:\n  * '1' - Unmanagable\n  * '2' - Windows\n  * '3' - Linux\n  * '4' - Mac\n"
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+    identityProtectionState:
+      description: "Possible asset status:\n  * '0' - Unspecified\n  * '1' - Unsegmented\n  * '2' - Unspecified\n  * '3' - Segmented\n  * '4' - Unsegmented\n  * '5' - In learning\n  * '6' - Forced Unprotected\n  * '7' - Forced Removing Protection\n  * '8' - Protected Due To Policy\n  * '9' - Applying Protection Due To Policy\n  * '10' - In learning Due To Policy\n  * '11' - Learning Done\n  * '12' - In learning Due To Policy Done\n"
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+    otLocation:
+      type: object
+      properties:
+        interfaceName:
+          type: string
+        name:
+          type: string
+        switchId:
+          type: string
+  parameters:
+    ruleIdParameter:
+      name: ruleId
+      in: path
+      description: The id of the rule
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: d37077dc-0660-454d-81a0-f52f491fd5b8
+      x-speakeasy-name-override: id
+  responses:
+    '409':
+      description: Already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '500':
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: Authorization
+      in: header
