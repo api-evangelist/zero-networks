@@ -226,9 +226,44 @@ paths:
       x-speakeasy-entity-operation: CustomGroupMembers#delete
 components:
   schemas:
-    customGroupMembersBody:
+    groupConditions:
       type: object
       properties:
+        domains:
+          type: array
+          items:
+            type: string
+        namePatterns:
+          type: array
+          items:
+            type: string
+        osNamePatterns:
+          type: array
+          items:
+            type: string
+        osTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/osType'
+        assetTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/assetType'
+        ipBuiltins:
+          type: array
+          items:
+            type: string
+    emptyResponse:
+      type: object
+    customGroupBody:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        description:
+          type: string
         membersId:
           description: members id
           type: array
@@ -237,9 +272,16 @@ components:
             pattern: ^g:[c]:[a-zA-Z0-9]{8}$
           example:
           - g:c:ab124as2
-      required:
-      - membersId
-      x-speakeasy-entity: CustomGroupMembers
+        conditions:
+          $ref: '#/components/schemas/groupConditions'
+          minProperties: 1
+          example:
+            osNamePatterns:
+            - Windows.*
+            assetTypes:
+            - 1
+            - 2
+      x-speakeasy-entity: CustomGroup
     error:
       type: object
       properties:
@@ -431,15 +473,14 @@ components:
       - 177
       - 178
       - 1001
-    customGroupBody:
+    epochMillis:
+      description: Epoch Millis
+      type: integer
+      format: int64
+      title: epochMillis
+    customGroupMembersBody:
       type: object
-      required:
-      - name
       properties:
-        name:
-          type: string
-        description:
-          type: string
         membersId:
           description: members id
           type: array
@@ -448,16 +489,26 @@ components:
             pattern: ^g:[c]:[a-zA-Z0-9]{8}$
           example:
           - g:c:ab124as2
-        conditions:
-          $ref: '#/components/schemas/groupConditions'
-          minProperties: 1
-          example:
-            osNamePatterns:
-            - Windows.*
-            assetTypes:
-            - 1
-            - 2
-      x-speakeasy-entity: CustomGroup
+      required:
+      - membersId
+      x-speakeasy-entity: CustomGroupMembers
+    osType:
+      description: "Possible osType:\n  * '1' - Unmanagable\n  * '2' - Windows\n  * '3' - Linux\n  * '4' - Mac\n"
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+    groupMembersList:
+      type: object
+      properties:
+        membersId:
+          type: array
+          items:
+            type: string
+      x-speakeasy-entity: CustomGroupMembers
     customGroup:
       type: object
       properties:
@@ -497,83 +548,14 @@ components:
               type: string
               example: User Name
       x-speakeasy-entity: CustomGroup
-    emptyResponse:
-      type: object
     customGroupResponse:
       type: object
       properties:
         entity:
           $ref: '#/components/schemas/customGroup'
-    groupConditions:
-      type: object
-      properties:
-        domains:
-          type: array
-          items:
-            type: string
-        namePatterns:
-          type: array
-          items:
-            type: string
-        osNamePatterns:
-          type: array
-          items:
-            type: string
-        osTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/osType'
-        assetTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/assetType'
-        ipBuiltins:
-          type: array
-          items:
-            type: string
-    groupMembersList:
-      type: object
-      properties:
-        membersId:
-          type: array
-          items:
-            type: string
-      x-speakeasy-entity: CustomGroupMembers
-    osType:
-      description: "Possible osType:\n  * '1' - Unmanagable\n  * '2' - Windows\n  * '3' - Linux\n  * '4' - Mac\n"
-      type: integer
-      format: int32
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-    epochMillis:
-      description: Epoch Millis
-      type: integer
-      format: int64
-      title: epochMillis
   responses:
-    200_empty:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/emptyResponse'
-    '409':
-      description: Already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '403':
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '401':
-      description: Unauthorized
+    '500':
+      description: Server Error
       content:
         application/json:
           schema:
@@ -584,18 +566,36 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '409':
+      description: Already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
     '404':
       description: Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
-    '500':
-      description: Server Error
+    '403':
+      description: Forbidden
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
+    200_empty:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/emptyResponse'
   parameters:
     groupIdParameter:
       name: groupId

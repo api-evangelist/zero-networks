@@ -144,12 +144,103 @@ paths:
       x-speakeasy-entity-operation: RPCRule#delete
 components:
   schemas:
-    interfaceUuidsList:
-      type: array
-      items:
-        type: string
-        format: uuid or string
-      description: "one of the following: \n* \"rpcAnyInterface\" for any interface \n* List of interface uuids for explicit interfaces\n"
+    userRole:
+      description: "* '0' - Unspecified\n* '1' - Admin\n* '2' - Viewer\n* '3' - Regular\n* '4' - API-FullAccess\n* '5' - API-ReadOnly\n* '6' - SelfService\n* '7' - CloudConnectorProvisioning\n* '8' - JAMF Asset\n* '9' - Asset Manager\n* '10' - Operator\n* '11' - Service Now Token\n* '12' - Segment Server Provisioning\n* '13' - Connect Server Provisioning\n* '14' - Segment Connector Provisioning \n"
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+    enforcementSource:
+      description: '* ''1'' - ReactivePolicy
+
+        * ''2'' - Automated
+
+        * ''3'' - AccessPortal
+
+        * ''4'' - AdminPortal
+
+        * ''5'' - AI
+
+        * ''6'' - API
+
+        * ''7'' - Setup
+
+        * ''8'' - Connect
+
+        * ''9'' - System
+
+        * ''10'' - DownloadPortal
+
+        * ''11'' - ExternalAccessPortal
+
+        * ''12'' - DayTwo
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+    idNamePair:
+      type: object
+      properties:
+        id:
+          description: EntityId
+          type: string
+        name:
+          description: Entity Name
+          type: string
+    ruleClass:
+      description: '* ''1'' - Trivial
+
+        * ''2'' - Permissive
+
+        * ''3'' - Privileged
+
+        * ''4'' - Critical
+
+        * ''5'' - System
+
+        * ''6'' - Preventative
+
+        * ''8'' - Dangerous
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 8
     error:
       type: object
       properties:
@@ -183,6 +274,28 @@ components:
       - 5
       - 6
       - 7
+    createdBy:
+      type: object
+      properties:
+        createdBy:
+          $ref: '#/components/schemas/idNamePair'
+        email:
+          type: string
+        enforcementSource:
+          $ref: '#/components/schemas/enforcementSource'
+        userRole:
+          $ref: '#/components/schemas/userRole'
+    epochMillis:
+      description: Epoch Millis
+      type: integer
+      format: int64
+      title: epochMillis
+    interfaceUuidsList:
+      type: array
+      items:
+        type: string
+        format: uuid or string
+      description: "one of the following: \n* \"rpcAnyInterface\" for any interface \n* List of interface uuids for explicit interfaces\n"
     rpcRule:
       type: object
       properties:
@@ -252,124 +365,6 @@ components:
           items:
             $ref: '#/components/schemas/idNamePair'
       x-speakeasy-entity: RPCRule
-    ruleAction:
-      description: '* 1 - Allow
-
-        * 2 - Block
-
-        * 3 - Force Block
-
-        '
-      type: integer
-      format: int32
-      enum:
-      - 1
-      - 2
-      - 3
-    createdBy:
-      type: object
-      properties:
-        createdBy:
-          $ref: '#/components/schemas/idNamePair'
-        email:
-          type: string
-        enforcementSource:
-          $ref: '#/components/schemas/enforcementSource'
-        userRole:
-          $ref: '#/components/schemas/userRole'
-    enforcementSource:
-      description: '* ''1'' - ReactivePolicy
-
-        * ''2'' - Automated
-
-        * ''3'' - AccessPortal
-
-        * ''4'' - AdminPortal
-
-        * ''5'' - AI
-
-        * ''6'' - API
-
-        * ''7'' - Setup
-
-        * ''8'' - Connect
-
-        * ''9'' - System
-
-        * ''10'' - DownloadPortal
-
-        * ''11'' - ExternalAccessPortal
-
-        * ''12'' - DayTwo
-
-        '
-      type: integer
-      format: int32
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      - 12
-    rpcRuleResponse:
-      type: object
-      properties:
-        item:
-          $ref: '#/components/schemas/rpcRule'
-    userRole:
-      description: "* '0' - Unspecified\n* '1' - Admin\n* '2' - Viewer\n* '3' - Regular\n* '4' - API-FullAccess\n* '5' - API-ReadOnly\n* '6' - SelfService\n* '7' - CloudConnectorProvisioning\n* '8' - JAMF Asset\n* '9' - Asset Manager\n* '10' - Operator\n* '11' - Service Now Token\n* '12' - Segment Server Provisioning\n* '13' - Connect Server Provisioning\n* '14' - Segment Connector Provisioning \n"
-      type: integer
-      format: int32
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      - 12
-      - 13
-      - 14
-    ruleClass:
-      description: '* ''1'' - Trivial
-
-        * ''2'' - Permissive
-
-        * ''3'' - Privileged
-
-        * ''4'' - Critical
-
-        * ''5'' - System
-
-        * ''6'' - Preventative
-
-        * ''8'' - Dangerous
-
-        '
-      type: integer
-      format: int32
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 8
     rpcRuleBody:
       type: object
       properties:
@@ -419,15 +414,20 @@ components:
       - state
       - userIdsList
       x-speakeasy-entity: RPCRule
-    idNamePair:
-      type: object
-      properties:
-        id:
-          description: EntityId
-          type: string
-        name:
-          description: Entity Name
-          type: string
+    ruleAction:
+      description: '* 1 - Allow
+
+        * 2 - Block
+
+        * 3 - Force Block
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
     rpcProtocolsList:
       type: array
       items:
@@ -439,11 +439,11 @@ components:
         * ''2'' - Rules RPC over TCP
 
         '
-    epochMillis:
-      description: Epoch Millis
-      type: integer
-      format: int64
-      title: epochMillis
+    rpcRuleResponse:
+      type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/rpcRule'
   parameters:
     ruleIdParameter:
       name: ruleId
@@ -456,20 +456,8 @@ components:
       example: d37077dc-0660-454d-81a0-f52f491fd5b8
       x-speakeasy-name-override: id
   responses:
-    '409':
-      description: Already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '403':
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '401':
-      description: Unauthorized
+    '500':
+      description: Server Error
       content:
         application/json:
           schema:
@@ -480,14 +468,26 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '409':
+      description: Already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
     '404':
       description: Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
-    '500':
-      description: Server Error
+    '403':
+      description: Forbidden
       content:
         application/json:
           schema:

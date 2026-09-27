@@ -51,14 +51,8 @@ paths:
       x-speakeasy-entity-operation: AssetId#get
 components:
   responses:
-    '401':
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '400':
-      description: Bad Request
+    '404':
+      description: Not Found
       content:
         application/json:
           schema:
@@ -69,14 +63,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
-    '404':
-      description: Not Found
+    '500':
+      description: Server Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
-    '500':
-      description: Server Error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '400':
+      description: Bad Request
       content:
         application/json:
           schema:
