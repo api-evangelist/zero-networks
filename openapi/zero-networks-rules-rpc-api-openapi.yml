@@ -143,7 +143,107 @@ paths:
       - Rules RPC
       x-speakeasy-entity-operation: RPCRule#delete
 components:
+  responses:
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '500':
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '409':
+      description: Already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
   schemas:
+    epochMillis:
+      description: Epoch Millis
+      type: integer
+      format: int64
+      title: epochMillis
+    idNamePair:
+      type: object
+      properties:
+        id:
+          description: EntityId
+          type: string
+        name:
+          description: Entity Name
+          type: string
+    rpcRuleBody:
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/ruleAction'
+        changeTicket:
+          type: string
+        description:
+          type: string
+        excludedAssetIdsList:
+          type: array
+          items:
+            type: string
+        expiresAt:
+          $ref: '#/components/schemas/epochMillis'
+        interfaceUuidsList:
+          $ref: '#/components/schemas/interfaceUuidsList'
+        localAssetId:
+          type: string
+        name:
+          type: string
+        opNumbersList:
+          type: array
+          items:
+            type: integer
+        protocolsList:
+          $ref: '#/components/schemas/rpcProtocolsList'
+        remoteAssetIdsList:
+          type: array
+          items:
+            type: string
+        state:
+          $ref: '#/components/schemas/ruleState'
+        userIdsList:
+          type: array
+          items:
+            type: string
+      required:
+      - action
+      - description
+      - excludedAssetIdsList
+      - interfaceUuidsList
+      - localAssetId
+      - opNumbersList
+      - protocolsList
+      - remoteAssetIdsList
+      - state
+      - userIdsList
+      x-speakeasy-entity: RPCRule
     userRole:
       description: "* '0' - Unspecified\n* '1' - Admin\n* '2' - Viewer\n* '3' - Regular\n* '4' - API-FullAccess\n* '5' - API-ReadOnly\n* '6' - SelfService\n* '7' - CloudConnectorProvisioning\n* '8' - JAMF Asset\n* '9' - Asset Manager\n* '10' - Operator\n* '11' - Service Now Token\n* '12' - Segment Server Provisioning\n* '13' - Connect Server Provisioning\n* '14' - Segment Connector Provisioning \n"
       type: integer
@@ -164,6 +264,32 @@ components:
       - 12
       - 13
       - 14
+    ruleClass:
+      description: '* ''1'' - Trivial
+
+        * ''2'' - Permissive
+
+        * ''3'' - Privileged
+
+        * ''4'' - Critical
+
+        * ''5'' - System
+
+        * ''6'' - Preventative
+
+        * ''8'' - Dangerous
+
+        '
+      type: integer
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 8
     enforcementSource:
       description: '* ''1'' - ReactivePolicy
 
@@ -206,74 +332,6 @@ components:
       - 10
       - 11
       - 12
-    idNamePair:
-      type: object
-      properties:
-        id:
-          description: EntityId
-          type: string
-        name:
-          description: Entity Name
-          type: string
-    ruleClass:
-      description: '* ''1'' - Trivial
-
-        * ''2'' - Permissive
-
-        * ''3'' - Privileged
-
-        * ''4'' - Critical
-
-        * ''5'' - System
-
-        * ''6'' - Preventative
-
-        * ''8'' - Dangerous
-
-        '
-      type: integer
-      format: int32
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 8
-    error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
-    ruleState:
-      description: '* ''1'' - Enabled
-
-        * ''2'' - Disabled
-
-        * ''3'' - Deleted By User
-
-        * ''4'' - Pending Review
-
-        * ''5'' - Pending Review Auto
-
-        * ''6'' - Rejected by User
-
-        * ''7'' - Excluded by User
-
-        '
-      type: integer
-      format: int32
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
     createdBy:
       type: object
       properties:
@@ -285,17 +343,42 @@ components:
           $ref: '#/components/schemas/enforcementSource'
         userRole:
           $ref: '#/components/schemas/userRole'
-    epochMillis:
-      description: Epoch Millis
+    ruleAction:
+      description: '* 1 - Allow
+
+        * 2 - Block
+
+        * 3 - Force Block
+
+        '
       type: integer
-      format: int64
-      title: epochMillis
+      format: int32
+      enum:
+      - 1
+      - 2
+      - 3
     interfaceUuidsList:
       type: array
       items:
         type: string
         format: uuid or string
       description: "one of the following: \n* \"rpcAnyInterface\" for any interface \n* List of interface uuids for explicit interfaces\n"
+    rpcProtocolsList:
+      type: array
+      items:
+        type: integer
+      description: '* NULL - Any
+
+        * ''1'' - Rules RPC over SMB
+
+        * ''2'' - Rules RPC over TCP
+
+        '
+    rpcRuleResponse:
+      type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/rpcRule'
     rpcRule:
       type: object
       properties:
@@ -365,61 +448,27 @@ components:
           items:
             $ref: '#/components/schemas/idNamePair'
       x-speakeasy-entity: RPCRule
-    rpcRuleBody:
+    error:
       type: object
       properties:
-        action:
-          $ref: '#/components/schemas/ruleAction'
-        changeTicket:
+        error:
           type: string
-        description:
+        message:
           type: string
-        excludedAssetIdsList:
-          type: array
-          items:
-            type: string
-        expiresAt:
-          $ref: '#/components/schemas/epochMillis'
-        interfaceUuidsList:
-          $ref: '#/components/schemas/interfaceUuidsList'
-        localAssetId:
-          type: string
-        name:
-          type: string
-        opNumbersList:
-          type: array
-          items:
-            type: integer
-        protocolsList:
-          $ref: '#/components/schemas/rpcProtocolsList'
-        remoteAssetIdsList:
-          type: array
-          items:
-            type: string
-        state:
-          $ref: '#/components/schemas/ruleState'
-        userIdsList:
-          type: array
-          items:
-            type: string
-      required:
-      - action
-      - description
-      - excludedAssetIdsList
-      - interfaceUuidsList
-      - localAssetId
-      - opNumbersList
-      - protocolsList
-      - remoteAssetIdsList
-      - state
-      - userIdsList
-      x-speakeasy-entity: RPCRule
-    ruleAction:
-      description: '* 1 - Allow
+    ruleState:
+      description: '* ''1'' - Enabled
 
-        * 2 - Block
+        * ''2'' - Disabled
 
-        * 3 - Force Block
+        * ''3'' - Deleted By User
+
+        * ''4'' - Pending Review
+
+        * ''5'' - Pending Review Auto
+
+        * ''6'' - Rejected by User
+
+        * ''7'' - Excluded by User
 
         '
       type: integer
@@ -428,22 +477,10 @@ components:
       - 1
       - 2
       - 3
-    rpcProtocolsList:
-      type: array
-      items:
-        type: integer
-      description: '* NULL - Any
-
-        * ''1'' - Rules RPC over SMB
-
-        * ''2'' - Rules RPC over TCP
-
-        '
-    rpcRuleResponse:
-      type: object
-      properties:
-        item:
-          $ref: '#/components/schemas/rpcRule'
+      - 4
+      - 5
+      - 6
+      - 7
   parameters:
     ruleIdParameter:
       name: ruleId
@@ -455,43 +492,6 @@ components:
         format: uuid
       example: d37077dc-0660-454d-81a0-f52f491fd5b8
       x-speakeasy-name-override: id
-  responses:
-    '500':
-      description: Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '400':
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '401':
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '409':
-      description: Already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '404':
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '403':
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
   securitySchemes:
     api_key:
       type: apiKey
