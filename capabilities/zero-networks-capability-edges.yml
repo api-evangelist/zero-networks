@@ -1,0 +1,77 @@
+slug: zero-networks
+provider: Zero Networks
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 6
+edges:
+- tag: Rules Inbound
+  spec_file: zero-networks-rules-inbound-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.85
+  evidence: POST /protection/rules/inbound — "Create Inbound Rule"; schemas "enforcementMethod", "portsList",
+    "ipSecOpt"
+  reason: CRUD over host-firewall microsegmentation allow rules — network security control enforcement,
+    so Cybersecurity Management at L1. No candidate L2 precisely covers network segmentation enforcement,
+    so L2 left null.
+- tag: Rules Outbound
+  spec_file: zero-networks-rules-outbound-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.85
+  evidence: POST /protection/rules/outbound — "Create Outbound Rule"; schemas "ruleDirection", "enforcementSource",
+    "portsList"
+  reason: Outbound firewall/segmentation rule lifecycle — security control configuration and enforcement,
+    mapped at Cybersecurity Management L1 without a confident L2.
+- tag: Rules RPC
+  spec_file: zero-networks-rules-rpc-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.82
+  evidence: POST /protection/rpc-rules — "Create RPC Rule"; schemas "rpcProtocolsList", "interfaceUuidsList",
+    "ruleAction"
+  reason: Protocol-level (RPC) allow/deny security rules for protected assets; clearly cybersecurity control
+    enforcement, L2 not determinable from the candidate set.
+- tag: MFA Inbound
+  spec_file: zero-networks-mfa-inbound-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: POST /protection/reactive-policies/inbound — "Add Inbound MFA Policy"; schemas "mfaMethods",
+    "identityProtectionCategory"
+  reason: Manages multi-factor authentication policies gating access to protected ports/assets, which
+    is squarely identity and access management within cybersecurity.
+- tag: MFA Outbound
+  spec_file: zero-networks-mfa-outbound-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: POST /protection/reactive-policies/outbound — "Add Outbound MFA Policy"; schemas "mfaMethods",
+    "identityProtectionState"
+  reason: MFA policy lifecycle for outbound access requests — authentication/authorisation control administration,
+    i.e. Identity & Access Management.
+- tag: AE Exclusions
+  spec_file: zero-networks-ae-exclusions-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.78
+  evidence: POST /protection/ae-exclusions/inbound — "Create AE Exclusion Inbound"; schemas include "enforcementMethod",
+    "protectionState", "ruleDirection"
+  reason: Exclusions from the automated microsegmentation rule-generation engine; these are network security
+    enforcement policy objects, so Cybersecurity Management at L1. No L2 fits cleanly (it is neither pure
+    IAM nor architecture design), so L2 abstained.
