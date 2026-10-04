@@ -59,14 +59,14 @@ components:
         type: string
       example: server.domain.local
   responses:
-    '403':
-      description: Forbidden
+    '404':
+      description: Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
-    '500':
-      description: Server Error
+    '403':
+      description: Forbidden
       content:
         application/json:
           schema:
@@ -77,8 +77,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
-    '404':
-      description: Not Found
+    '500':
+      description: Server Error
       content:
         application/json:
           schema:
@@ -90,6 +90,12 @@ components:
           schema:
             $ref: '#/components/schemas/error'
   schemas:
+    assetIdSearch:
+      type: object
+      properties:
+        assetId:
+          type: string
+      x-speakeasy-entity: AssetId
     error:
       type: object
       properties:
@@ -97,12 +103,6 @@ components:
           type: string
         message:
           type: string
-    assetIdSearch:
-      type: object
-      properties:
-        assetId:
-          type: string
-      x-speakeasy-entity: AssetId
   securitySchemes:
     api_key:
       type: apiKey
