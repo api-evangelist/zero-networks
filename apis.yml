@@ -16,7 +16,7 @@ x-type: company
 x-source: harvest:secondary-market
 specificationVersion: '0.20'
 created: '2026-09-05'
-modified: '2026-09-05'
+modified: '2026-10-06'
 tags:
 - Security
 - Network Security
@@ -198,6 +198,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- url: https://zeronetworks.com/feed
+  type: BlogRSS
 - type: CapabilityMap
   url: capabilities/zero-networks-capability-edges.yml
   name: Zero Networks Business Capability Map
