@@ -50,17 +50,15 @@ paths:
       - Assets
       x-speakeasy-entity-operation: AssetId#get
 components:
-  parameters:
-    fqdnParameter:
-      name: fqdn
-      in: query
-      description: fully qualified domain name
-      schema:
-        type: string
-      example: server.domain.local
   responses:
-    '404':
-      description: Not Found
+    '500':
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '400':
+      description: Bad Request
       content:
         application/json:
           schema:
@@ -77,14 +75,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
-    '500':
-      description: Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-    '400':
-      description: Bad Request
+    '404':
+      description: Not Found
       content:
         application/json:
           schema:
@@ -103,6 +95,14 @@ components:
           type: string
         message:
           type: string
+  parameters:
+    fqdnParameter:
+      name: fqdn
+      in: query
+      description: fully qualified domain name
+      schema:
+        type: string
+      example: server.domain.local
   securitySchemes:
     api_key:
       type: apiKey
