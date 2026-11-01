@@ -64,5 +64,131 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Zero Networks is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+Zero Networks is an Israeli-American network security company whose Segment platform delivers automated, agentless microsegmentation and identity segmentation for enterprise networks. It builds a host-based firewall "bubble" around every asset, learns normal east-west traffic for 30 days, then auto-generates least-privilege allow rules and closes privileged ports behind just-in-time multi-factor authentication — extending MFA to protocols such as RDP, SSH, SMB, WinRM and RPC that were never designed for it. The platform also covers identity segmentation for admin and service accounts, Kubernetes segmentation, OT/IoT assets, and a ZTNA-style secure remote access product that replaces VPN. Zero Networks operates a customer-facing REST API at portal.zeronetworks.com/api/v1 secured with an Authorization API token issued from the console, and publishes a first-party OpenAPI 3.0.1 contract plus Speakeasy-generated Python, PowerShell and Terraform clients from its own GitHub organization.
+
+**Areas:** Security · Network Security · Microsegmentation · Zero Trust · Identity · Multi-Factor Authentication · Segmentation · ZTNA · Kubernetes · Cybersecurity
+
+## Zero Networks on APIs.io
+
+Everything profiled for Zero Networks is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/zero-networks/](https://apis.io/providers/zero-networks/)** — or go straight to one of the APIs or properties below.
+
+### APIs (9)
+
+- [Zero Networks AE Exclusions API](https://apis.io/apis/zero-networks/zero-networks-ae-exclusions-api/) — API calls related to AE Exclusions.
+- [Zero Networks Assets API](https://apis.io/apis/zero-networks/zero-networks-assets-api/) — API calls related to Assets.
+- [Zero Networks Groups Custom API](https://apis.io/apis/zero-networks/zero-networks-groups-custom-api/) — API calls related to Custom Groups.
+- [Zero Networks Internal Access Policy API](https://apis.io/apis/zero-networks/zero-networks-internal-access-policy-api/) — The Internal Access Policy API from Zero Networks — 2 operation(s) for internal access policy.
+- [Zero Networks MFA Inbound API](https://apis.io/apis/zero-networks/zero-networks-mfa-inbound-api/) — API calls related to Inbound MFA policies.
+- [Zero Networks MFA Outbound API](https://apis.io/apis/zero-networks/zero-networks-mfa-outbound-api/) — API calls related to Outbound MFA policies.
+- [Zero Networks Rules Inbound API](https://apis.io/apis/zero-networks/zero-networks-rules-inbound-api/) — API calls related to Inbound rules.
+- [Zero Networks Rules Outbound API](https://apis.io/apis/zero-networks/zero-networks-rules-outbound-api/) — API calls related to Outbound rules.
+- [Zero Networks Rules RPC API](https://apis.io/apis/zero-networks/zero-networks-rules-rpc-api/) — API calls related to RPC Rules
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Zero Networks Webhooks](https://apis.io/asyncapis/zero-networks/zero-networks-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [zero-networks (candidate)](https://apis.io/servers/zero-networks/zero-networks-candidate/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Zero Networks Platform Overlay](https://apis.io/overlays/zero-networks/zero-networks-platform-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Zero Networks Authentication](https://apis.io/security/zero-networks/zero-networks-authentication/)
+- [Zero Networks Domain Security](https://apis.io/security/zero-networks/zero-networks-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Zero Networks Plans Pricing](https://apis.io/plans/zero-networks/zero-networks-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Zero Networks Rate Limits](https://apis.io/rate-limits/zero-networks/zero-networks-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://zeronetworks.com/)
+- [Sign up](https://portal.zeronetworks.com/)
+- [Support](https://support.zeronetworks.com/hc/en-us)
+- [Blog](https://zeronetworks.com/blog)
+- [Terms of service](https://zeronetworks.com/files/legal/Zero-Networks-Service-Agreement.pdf)
+- [Privacy policy](https://zeronetworks.com/legal/privacy-policy)
+- [GitHub](https://github.com/zeronetworks)
+- [Status](https://status.zeronetworks.com/)
+
+## API Evangelist rating
+
+**Kin Score 45.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 60.1 |
+| Contract governance | 18.2 |
+| Operational transparency | 26.3 |
+| Developer ergonomics | 37.5 |
+| Access clarity | 42.1 |
+
+**Agent readiness 20.2** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | derived (partial credit) |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | — |
+
+**Regulatory alignment 29.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/zero-networks/](https://apis.io/providers/zero-networks/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Zero Networks: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/zero-networks/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
